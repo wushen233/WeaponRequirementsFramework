@@ -1,0 +1,463 @@
+{
+  "Enabled": true,
+  "Priority": 0,
+
+  "Rules": [
+    // ==========================================================
+    // 手枪 (Pistols) - S7_SkillPistols
+    // ==========================================================
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000CE97D", // .44 左轮
+          "Fallout4.esm|000DC8E7", // 解放者 (Deliverer)
+          "Fallout4.esm|000E1703"  // 克罗格手枪
+        ]
+      }
+    },
+    {
+      "Priority": 50,
+      "ReqValue": 50.0,
+      "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000FD11B", // 舰炮 (Broadsider → FNV 38. 属于 Guns)
+          "Fallout4.esm|0004562F", // 10mm 手枪
+          "Fallout4.esm|0005C250"  // .308 左轮
+        ]
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A0", // WeaponTypePistol
+          "WeaponTypePistol"
+        ]
+      }
+    },
+    {
+      "Priority": 30,
+      "ReqValue": 0.0,
+      "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "dn_weap_Pipe", "WeaponTypeFlareGun" ]
+      }
+    },
+
+    // ==========================================================
+    // 步枪 (Rifles) - S7_SkillRifles
+    // ==========================================================
+    {
+      "Priority": 100,
+      "ReqValue": 100.0,
+      "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [ "Fallout4.esm|0014831C" ] // 战斗霰弹枪 → 步枪逻辑归入
+      }
+    },
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|0000463F", // 突击步枪
+          "Fallout4.esm|000FE268"  // 铁道步枪
+        ]
+      }
+    },
+    {
+      "Priority": 50,
+      "ReqValue": 50.0,
+      "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000DF42E"  // 战斗步枪
+        ]
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A2", // WeaponTypeRifle
+          "WeaponTypeRifle"
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 霰弹枪 (Shotguns) - S7_SkillShotguns
+    // ==========================================================
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Shotgun]",
+      "Skills": { "ActorValues": ["S7_SkillShotguns"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|0014831C"  // 战斗霰弹枪 (也可归步枪)
+        ]
+      }
+    },
+    {
+      "Priority": 50,
+      "ReqValue": 50.0,
+      "Icon": "[Shotgun]",
+      "Skills": { "ActorValues": ["S7_SkillShotguns"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|00092217"  // 双管霰弹枪
+        ]
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Shotgun]",
+      "Skills": { "ActorValues": ["S7_SkillShotguns"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A09E", // WeaponTypeShotgun
+          "WeaponTypeShotgun"
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 自动武器 (Automatics) - S7_SkillAutomatics
+    // ==========================================================
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Auto]",
+      "Skills": { "ActorValues": ["S7_SkillAutomatics"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|0000463F"  // 突击步枪 (自动模式)
+        ]
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Auto]",
+      "Skills": { "ActorValues": ["S7_SkillAutomatics"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A1", // WeaponTypeAutomatic
+          "WeaponTypeAutomatic"
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 狙击 (Sniping) - S7_SkillSniping
+    // ==========================================================
+    {
+      "Priority": 100,
+      "ReqValue": 100.0,
+      "Icon": "[Sniper]",
+      "Skills": { "ActorValues": ["S7_SkillSniping"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000D1EB0"  // 高斯步枪 (FNV 中属于能量，但狙击跨类)
+        ]
+      }
+    },
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Sniper]",
+      "Skills": { "ActorValues": ["S7_SkillSniping"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeSniper" ]
+      }
+    },
+    {
+      "Priority": 50,
+      "ReqValue": 50.0,
+      "Icon": "[Sniper]",
+      "Skills": { "ActorValues": ["S7_SkillSniping"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000DF42E"  // 战斗步枪 (可装镜)
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 重武器 (Heavy Weaponry) - S7_SkillHeavyWeaponry
+    // ==========================================================
+    {
+      "Priority": 100,
+      "ReqValue": 100.0,
+      "Icon": "[Minigun]",
+      "Skills": { "ActorValues": ["S7_SkillHeavyWeaponry"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|0001F669", // 旋转机枪
+          "Fallout4.esm|000E27BC"  // 激光机枪
+        ]
+      }
+    },
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Minigun]",
+      "Skills": { "ActorValues": ["S7_SkillHeavyWeaponry"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000BD56F", // 胖子核弹
+          "Fallout4.esm|0003F6F8"  // 导弹发射器
+        ]
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Minigun]",
+      "Skills": { "ActorValues": ["S7_SkillHeavyWeaponry"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A3", // WeaponTypeHeavyGun
+          "WeaponTypeHeavyGun"
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 能量武器 (Energy Weapons) - S7_SkillEnergyWeapons
+    // ==========================================================
+    {
+      "Priority": 100,
+      "ReqValue": 100.0,
+      "Icon": "[Energy]",
+      "Skills": { "ActorValues": ["S7_SkillEnergyWeapons"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000FF995", // 异形破坏者
+          "Fallout4.esm|000D1EB0"  // 高斯步枪
+        ]
+      }
+    },
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Energy]",
+      "Skills": { "ActorValues": ["S7_SkillEnergyWeapons"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|001CC462", // WeaponTypePlasma
+          "WeaponTypePlasma"
+        ]
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Energy]",
+      "Skills": { "ActorValues": ["S7_SkillEnergyWeapons"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|001CC461", // WeaponTypeLaser
+          "Fallout4.esm|001CC463", // WeaponTypeGammaGun
+          "Fallout4.esm|001CC460", // WeaponTypeAlienBlaster
+          "WeaponTypeLaser", "WeaponTypeGammaGun", "WeaponTypeLaserMusket", "WeaponTypeAlienBlaster"
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 爆炸物 (Explosives) - S7_SkillExplosives
+    // ==========================================================
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Grenade]",
+      "Skills": { "ActorValues": ["S7_SkillExplosives"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000BD56F", // 胖子核弹
+          "Fallout4.esm|0003F6F8"  // 导弹发射器
+        ]
+      }
+    },
+    {
+      "Priority": 50,
+      "ReqValue": 50.0,
+      "Icon": "[Grenade]",
+      "Skills": { "ActorValues": ["S7_SkillExplosives"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [ "Fallout4.esm|000FD11B" ] // 舰炮
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Grenade]",
+      "Skills": { "ActorValues": ["S7_SkillExplosives"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|00092A87", // WeaponTypeExplosive
+          "Fallout4.esm|000B2CA9", // WeaponTypeThrown
+          "WeaponTypeExplosive", "WeaponTypeThrown"
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 近战武器 (Melee Weapons) - S7_SkillMelee
+    // ==========================================================
+    {
+      "Priority": 100,
+      "ReqValue": 100.0,
+      "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [ "Fallout4.esm|000FF964" ] // 超级大锤
+      }
+    },
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000FA3E8", // 火焰刀
+          "Fallout4.esm|000E41EB", // 大锤
+          "Fallout4.esm|000FA2F6", // 齿锯
+          "Fallout4.esm|00147BE4"  // 中国军官剑
+        ]
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A4", // WeaponTypeMelee1H
+          "Fallout4.esm|0004A0A5", // WeaponTypeMelee2H
+          "WeaponTypeMelee1H", "WeaponTypeMelee2H", "WeaponTypeRipper"
+        ]
+      }
+    },
+    {
+      "Priority": 30,
+      "ReqValue": 0.0,
+      "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|0005C25F", // 警棍
+          "Fallout4.esm|0008E736", // 棒球棍
+          "Fallout4.esm|000913CA", // 战斗刀
+          "Fallout4.esm|00033FE0", // 弯刀
+          "Fallout4.esm|000A01DD", // 钉板
+          "Fallout4.esm|000FDC81", // 弹簧刀
+          "Fallout4.esm|00143AB5", // 革命剑
+          "Fallout4.esm|000FC9C3"  // 铅管
+        ]
+      }
+    },
+
+    // ==========================================================
+    // 徒手格斗 (Unarmed) - S7_SkillUnarmed
+    // ==========================================================
+    {
+      "Priority": 75,
+      "ReqValue": 75.0,
+      "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [ "Fallout4.esm|000D8576" ] // 死亡爪臂铠
+      }
+    },
+    {
+      "Priority": 50,
+      "ReqValue": 50.0,
+      "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [ "Fallout4.esm|0011B336" ] // 动力拳套
+      }
+    },
+    {
+      "Priority": 25,
+      "ReqValue": 25.0,
+      "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0005240E", // WeaponTypeUnarmed
+          "Fallout4.esm|00226453", // WeaponTypeHandToHand
+          "WeaponTypeUnarmed"
+        ]
+      }
+    },
+    {
+      "Priority": 30,
+      "ReqValue": 0.0,
+      "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|0016498F", // 拳击手套
+          "Fallout4.esm|0005524B"  // 指虎
+        ]
+      }
+    }
+  ]
+}

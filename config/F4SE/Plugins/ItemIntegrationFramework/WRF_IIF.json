@@ -1,0 +1,41 @@
+{
+    "DataRules": [
+        {
+            "ConditionType": "Form",
+            "ValuesMapping": {
+                "Weapon Requirements Framework.esp|0x1F7": {
+                    "value": "$WRF_PASupport"
+                },
+                "Weapon Requirements Framework.esp|0x257": {
+                    "value": "$WeaponTypePowerArmor"
+                }
+            }
+        }
+    ],
+    "global": {
+        "anchorMode": "after",
+        "anchorTarget": "CND",
+        "backgroundColor": "0x000000",
+        "content": {
+            "hasBackground": false,
+            "leftBox": {
+                "tag": "",
+                "value": ""
+            },
+            "rightBox": {
+                "align": "right",
+                "isIcon": false,
+                "tag": "",
+                "value": ""
+            },
+            "title": {
+                "highlight": false,
+                "text": "$WRF_Weapon_type"
+            }
+        },
+        "displayType": 2,
+        "hasBackground": false,
+        "id": "WRF_PA",
+        "priority": 5
+    }
+}

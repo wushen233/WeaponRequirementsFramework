@@ -1,0 +1,200 @@
+{
+  // =====================================================================
+  // 武器需求框架 (WRF) - 动态配件叠加与组合关键字托底配置
+  // =====================================================================
+  // 核心机制：
+  // 1. 动态配件 (Priority 100)：根据工作台改装 (机匣、枪管、瞄准镜) 动态加减需求。
+  // 2. 组合定性 (Priority 60)：利用 AND 锁定特殊混合分类 (如重型能量武器)。
+  // 3. 基础地基 (Priority 30-50)：严格参考 FNV 维基设定的基准线。
+  // =====================================================================
+  "Enabled": true,
+  "Priority": 0,
+
+  "Rules": [
+    // =========================================================
+    // ⚙️ 第一层：动态配件与词条修饰 (Priority 100，IsModifier: true)
+    // 根据武器当前的配件，在基础值上进行动态加减！
+    // =========================================================
+    {
+      // 1. 自动机匣：后坐力大幅增加，更难压枪 (力量需求 +1.0)
+      "Priority": 100,
+      "Value": 1.0,
+      "Options": { "IsModifier": true, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "dn_HasReceiver_Automatic" ]
+      }
+    },
+    {
+      // 2. 狙击瞄准镜：增加武器重心前移的配重，需要极稳的臂力 (力量需求 +1.0)
+      "Priority": 100,
+      "Value": 1.0,
+      "Options": { "IsModifier": true, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "HasScope", "dn_HasScope_Sniper" ]
+      }
+    },
+    {
+      // 3. 长枪管/重枪管：增加枪身自重 (力量需求 +0.5)
+      "Priority": 100,
+      "Value": 0.5,
+      "Options": { "IsModifier": true, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "dn_HasBarrel_Long", "dn_HasBarrel_Heavy" ]
+      }
+    },
+    {
+      // 4. 消音器：枪口配重增加 (力量需求 +0.5)
+      "Priority": 100,
+      "Value": 0.5,
+      "Options": { "IsModifier": true, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "HasSilencer", "dn_HasMuzzle_Suppressor" ]
+      }
+    },
+    {
+      // 5. 铁管武器基础结构：简陋且轻便，对标 FNV 的 9mm 和 Varmint (力量需求 -1.0)
+      "Priority": 100,
+      "Value": -1.0,
+      "Options": { "IsModifier": true, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "dn_weap_Pipe" ]
+      }
+    },
+    {
+      // 6. 双弹传奇词条：后坐力彻底失控 (力量需求 +2.0)
+      "Priority": 100,
+      "Value": 2.0,
+      "Options": { "IsModifier": true, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "HasLegendary_Weapon_TwoShot" ]
+      }
+    },
+
+    // =========================================================
+    // 🔗 第二层：组合关键字精准捕获 (Priority 60, MatchType: AND)
+    // 专门抓取多重标签的复合武器，防止被下层单标签带偏
+    // =========================================================
+    {
+      // 重型能量武器：同时具备【重武器】与【能量】标签 (如激光机枪)
+      // 确保它不会受到任何负面修饰，稳稳对标 FNV 力量 8.0！
+      "Priority": 60,
+      "Value": 8.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "AND",
+        "Keywords": [ "WeaponTypeHeavyGun", "WeaponTypeLaser" ]
+      }
+    },
+    {
+      // 重型等离子武器：(如等离子发射器 FNV 力量 8.0)
+      "Priority": 60,
+      "Value": 8.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "AND",
+        "Keywords": [ "WeaponTypeHeavyGun", "WeaponTypePlasma" ]
+      }
+    },
+    {
+      // 笨重的水冷突击步枪：同时满足【步枪】和【突击步枪】
+      // FO4 的突击步枪其实是个机枪架子，极其沉重，基础力量给到 5.0
+      "Priority": 60,
+      "Value": 5.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "AND",
+        "Keywords": [ "WeaponTypeRifle", "WeaponTypeAssaultRifle" ]
+      }
+    },
+
+    // =========================================================
+    // 🧱 第三层：基础武器大类托底 (Priority 30 ~ 50)
+    // =========================================================
+    {
+      // 重型武器托底 (对应 FNV 力量 7~8)
+      "Priority": 50,
+      "Value": 7.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeHeavyGun" ]
+      }
+    },
+    {
+      // 狙击步枪托底 (对应 FNV 力量 6)
+      "Priority": 45,
+      "Value": 6.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeSniper" ]
+      }
+    },
+    {
+      // 霰弹枪与普通突击步枪 (对应 FNV 力量 5)
+      "Priority": 40,
+      "Value": 5.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeShotgun", "WeaponTypeAssaultRifle" ]
+      }
+    },
+    {
+      // 标准步枪托底 (包含普通激光步枪/等离子步枪，对应 FNV 力量 4)
+      "Priority": 35,
+      "Value": 4.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeRifle" ]
+      }
+    },
+    {
+      // 手枪与注射器托底 (包含能量手枪，对应 FNV 力量 3)
+      "Priority": 30,
+      "Value": 3.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypePistol", "WeaponTypeSyringer" ]
+      }
+    },
+    {
+      // 双手近战托底 (对应 FNV 力量 5~6)
+      "Priority": 40,
+      "Value": 6.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeMelee2H" ]
+      }
+    },
+    {
+      // 单手近战与徒手托底 (对应 FNV 力量 1~2)
+      "Priority": 30,
+      "Value": 2.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeMelee1H", "WeaponTypeUnarmed" ]
+      }
+    },
+    {
+      // 终极保底 (防漏水网)
+      "Priority": 10,
+      "Value": 3.0,
+      "Options": { "IsModifier": false, "IsMultiplier": false },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [ "WeaponTypeBallistic", "WeaponTypeLaser", "WeaponTypePlasma" ]
+      }
+    }
+  ]
+}

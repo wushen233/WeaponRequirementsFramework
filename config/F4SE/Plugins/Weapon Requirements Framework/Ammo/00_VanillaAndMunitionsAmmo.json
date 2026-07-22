@@ -1,0 +1,145 @@
+{
+  // =====================================================================
+  // 武器需求框架 - 原版与扩展弹药重量需求配置
+  // =====================================================================
+  // 提示：弹药系统作为最后的加算工序，不需要设置 Options 和 Priority。
+  // 只要武器当前使用的弹药命中下方列表，就会直接加上对应的数值。
+  // =====================================================================
+  "Enabled": true,
+
+  "Rules": [
+    {
+      // 【需求 0】：无重量/极轻弹药 (包含能量、轻型动能弹、特殊子弹)
+      "Value": 0,
+      "Conditions": {
+        "Ammo": [
+          "Fallout4.esm|1025AE",   // 信号弹
+          "Fallout4.esm|1025AA",   // 外星破坏者弹药
+          "Fallout4.esm|18ABE2",   // 冷冻电池
+          "DLCRobot.esm|9E1",      // 冷冻电池 (DLC)
+          "Fallout4.esm|0DF279",   // 伽马弹
+          "Fallout4.esm|0CAC78",   // 燃料
+          "Fallout4.esm|2491A7",   // 燃料
+          "DLCRobot.esm|9D6",      // 燃料 (DLC)
+          "Fallout4.esm|01F66C",   // 5mm
+          "Fallout4.esm|1943D0",   // 5mm
+          "Fallout4.esm|04CE87",   // .38
+          "DLCCoast.esm|54449",    // .38 (DLC)
+          "Fallout4.esm|0E942C",   // 垃圾喷射炮弹药
+          "Munitions - An Ammo Expansion.esl|FB1",  // .22
+          "Munitions - An Ammo Expansion.esl|6C8"   // BB弹
+        ]
+      }
+    },
+    {
+      // 【需求 1】：常见手枪/轻步枪弹药及基础能量电池
+      "Value": 1,
+      "Conditions": {
+        "Ammo": [
+          "Fallout4.esm|0C1897",   // 核聚变电池 (FusionCell)
+          "Fallout4.esm|01F276",   // 10mm
+          "Fallout4.esm|245D6A",   // 10mm
+          "Fallout4.esm|01F66A",   // .45
+          "Fallout4.esm|245D6B",   // .45
+          "Munitions - An Ammo Expansion.esl|FAA",  // .223
+          "Munitions - An Ammo Expansion.esl|812",  // .25
+          "Munitions - An Ammo Expansion.esl|6D6",  // .30
+          "Munitions - An Ammo Expansion.esl|FB0",  // .32
+          "Munitions - An Ammo Expansion.esl|6CB",  // 4.7mm 无壳弹
+          "Munitions - An Ammo Expansion.esl|6EE",  // .40
+          "Munitions - An Ammo Expansion.esl|796",  // .410 霰弹
+          "Munitions - An Ammo Expansion.esl|717",  // 5.7mm
+          "Munitions - An Ammo Expansion.esl|6CA",  // 7.62 Tokarev
+          "Munitions - An Ammo Expansion.esl|FAF",  // 9mm
+          "Munitions - An Ammo Expansion.esl|58",   // 裂变电池 (FissionBattery)
+          "Munitions - An Ammo Expansion.esl|FD3"   // 能量电池 (SmallEnergyCell)
+        ]
+      }
+    },
+    {
+      // 【需求 2】：中型步枪弹药、霰弹及大型能量包
+      "Value": 2,
+      "Conditions": {
+        "Ammo": [
+          "Fallout4.esm|075FE4",   // 融合核心 (Fusion Core)
+          "Fallout4.esm|01DBB7",   // 等离子弹药
+          "Fallout4.esm|01F278",   // 5.56mm
+          "DLCRobot.esm|A15",      // 5.56mm (DLC)
+          "Fallout4.esm|01F673",   // 12号 霰弹
+          "Fallout4.esm|0FE269",   // 铁轨钉
+          "DLCRobot.esm|9F8",      // 铁轨钉 (DLC)
+          "Munitions - An Ammo Expansion.esl|FAC",  // 20号 霰弹
+          "Munitions - An Ammo Expansion.esl|7A2"   // 5.45mm
+        ]
+      }
+    },
+    {
+      // 【需求 3】：大口径手枪及全威力步枪弹药
+      "Value": 3,
+      "Conditions": {
+        "Ammo": [
+          "Fallout4.esm|01F66B",   // .308
+          "Fallout4.esm|245D53",   // .308
+          "Fallout4.esm|09221C",   // .44
+          "DLCCoast.esm|02C8B1",   // .45-70
+          "DLCCoast.esm|04D39C",   // .45-70
+          "DLCNukaWorld.esm|037897", // 7.62mm (Nuka World)
+          "DLCNukaWorld.esm|0496EB", // 7.62mm
+          "Munitions - An Ammo Expansion.esl|FAE",  // 12.7mm
+          "Munitions - An Ammo Expansion.esl|6D8",  // .280
+          "Munitions - An Ammo Expansion.esl|6E2",  // .30-06
+          "Munitions - An Ammo Expansion.esl|BB",   // .300
+          "Munitions - An Ammo Expansion.esl|6D7",  // .303
+          "Munitions - An Ammo Expansion.esl|FB2",  // .357
+          "Munitions - An Ammo Expansion.esl|FCA",  // .44-40
+          "Munitions - An Ammo Expansion.esl|716",  // .455
+          "Munitions - An Ammo Expansion.esl|7A1",  // 6.5mm
+          "Munitions - An Ammo Expansion.esl|6E3",  // 7.92mm
+          "Munitions - An Ammo Expansion.esl|29",   // 7.62mmR
+          "Munitions - An Ammo Expansion.esl|22"    // .30-30
+        ]
+      }
+    },
+    {
+      // 【需求 4】：反器材级大口径实弹与特殊榴弹
+      "Value": 4,
+      "Conditions": {
+        "Ammo": [
+          "Fallout4.esm|01F279",   // .50
+          "Fallout4.esm|18ABDF",   // 2mm 电磁弹
+          "Munitions - An Ammo Expansion.esl|7EF",  // 14mm
+          "Munitions - An Ammo Expansion.esl|5",    // 4号 霰弹
+          "Munitions - An Ammo Expansion.esl|1",    // 8号 霰弹
+          "Munitions - An Ammo Expansion.esl|FC6",  // 25mm 榴弹
+          "Munitions - An Ammo Expansion.esl|FC7",  // 40mm 榴弹
+          "Munitions - An Ammo Expansion.esl|6CC",  // .50 Ball
+          "Munitions - An Ammo Expansion.esl|7F3"   // .500
+        ]
+      }
+    },
+    {
+      // 【需求 5】：重型爆炸物及炮弹
+      "Value": 5,
+      "Conditions": {
+        "Ammo": [
+          "DLCCoast.esm|10B80",    // 鱼叉
+          "Fallout4.esm|0FD11C",   // 舰炮炮弹
+          "Fallout4.esm|0CABA3",   // 导弹
+          "Fallout4.esm|18844F",   // 导弹
+          "DLCRobot.esm|A24"       // 导弹 (DLC)
+        ]
+      }
+    },
+    {
+      // 【需求 6】：核武器与机炮弹药
+      "Value": 6,
+      "Conditions": {
+        "Ammo": [
+          "Fallout4.esm|0E6B2E",   // 迷你核弹
+          "DLCRobot.esm|A36",      // 迷你核弹 (DLC)
+          "Munitions - An Ammo Expansion.esl|6E4"   // 20mm
+        ]
+      }
+    }
+  ]
+}

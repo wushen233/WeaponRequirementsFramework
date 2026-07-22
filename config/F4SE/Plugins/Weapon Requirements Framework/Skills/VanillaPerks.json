@@ -1,0 +1,255 @@
+{
+  // =====================================================================
+  // 武器需求框架 (WRF) - 原版 Perk 技能需求配置 (绝对 FormID 安全版)
+  // =====================================================================
+  "Enabled": true,
+  "Priority": 0,
+
+  "Rules": [
+    // ==========================================
+    // 🔫 第一组：突击队 (Commando) - 自动武器
+    // ==========================================
+    {
+      "Priority": 100,
+      "ReqValue": 1.0,
+      "Icon": "[Rifle]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0C5"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A1", // WeaponTypeAutomatic
+          "WeaponTypeAutomatic"    // 双保险托底
+        ],
+        "Weapons": [
+          "Fallout4.esm|0015B043"  // 冲锋枪 (天生全自动)
+        ]
+      }
+    },
+
+    // ==========================================
+    // 🤠 第二组：双枪侠 (Gunslinger) - 非自动手枪
+    // ==========================================
+    {
+      "Priority": 50,
+      "ReqValue": 3.0,
+      "Icon": "[Pistol]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A09F"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000CE97D", // .44 左轮
+          "Fallout4.esm|000DC8E7"  // 解放者
+        ]
+      }
+    },
+    {
+      "Priority": 10,
+      "ReqValue": 1.0,
+      "Icon": "[Pistol]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A09F"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A0", // WeaponTypePistol
+          "Fallout4.esm|001CC460", // WeaponTypeAlienBlaster
+          "Fallout4.esm|001CC463"  // WeaponTypeGammaGun
+        ],
+        "Weapons": []
+      }
+    },
+
+    // ==========================================
+    // 🎯 第三组：步枪手 (Rifleman) - 非自动步枪
+    // ==========================================
+    {
+      "Priority": 50,
+      "ReqValue": 4.0,
+      "Icon": "[Energy]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0B6"] }, // 👑 已修复：正确的步枪手 ID
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": ["Fallout4.esm|000D1EB0"] // 高斯步枪
+      }
+    },
+    {
+      "Priority": 40,
+      "ReqValue": 2.0,
+      "Icon": "[Rifle]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0B6"] }, // 👑 已修复：正确的步枪手 ID
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000DF42E", // 战斗步枪
+          "Fallout4.esm|0014831C"  // 战斗霰弹枪
+        ]
+      }
+    },
+    {
+      "Priority": 10,
+      "ReqValue": 1.0,
+      "Icon": "[Rifle]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0B6"] }, // 👑 已修复：正确的步枪手 ID
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A2", // WeaponTypeRifle
+          "Fallout4.esm|0004A09E", // WeaponTypeShotgun
+          "Fallout4.esm|001CC461", // WeaponTypeLaser
+          "Fallout4.esm|001CC462"  // WeaponTypePlasma
+        ],
+        "Weapons": [
+          "Fallout4.esm|0001DACF", // 激光滑膛枪
+          "Fallout4.esm|0014831A", // 注射器
+          "Fallout4.esm|000FE268", // 铁道步枪
+          "Fallout4.esm|0000463F", // 突击步枪
+          "Fallout4.esm|0004F46A"  // 猎枪
+        ]
+      }
+    },
+
+    // ==========================================
+    // 🚀 第四组：重枪手 (Heavy Gunner) - 重型武器
+    // ==========================================
+    {
+      "Priority": 50,
+      "ReqValue": 4.0,
+      "Icon": "[Minigun]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0D6"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000BD56F", // 胖子核弹
+          "Fallout4.esm|000FD11B"  // 舰炮
+        ]
+      }
+    },
+    {
+      "Priority": 10,
+      "ReqValue": 1.0,
+      "Icon": "[Minigun]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0D6"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A3", // WeaponTypeHeavyGun
+          "Fallout4.esm|0022575D", // Minigun
+          "Fallout4.esm|0022575B", // MissileLauncher
+          "Fallout4.esm|00225763", // JunkJet
+          "Fallout4.esm|00225760", // Flamer
+          "Fallout4.esm|0022575F", // Cryolator
+          "Fallout4.esm|0022575E", // GatlingLaser
+          "Fallout4.esm|0022575C", // FatMan
+          "Fallout4.esm|00225766"  // Broadsider
+        ],
+        "Weapons": []
+      }
+    },
+
+    // ==========================================
+    // ⚔️ 第五组：大联盟 (Big Leagues) - 近战武器
+    // ==========================================
+    {
+      "Priority": 50,
+      "ReqValue": 3.0,
+      "Icon": "[Melee]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0B5"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": ["Fallout4.esm|000FF964"] // 超级大锤
+      }
+    },
+    {
+      "Priority": 40,
+      "ReqValue": 2.0,
+      "Icon": "[Melee]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0B5"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|000E41EB", // 大锤 (Sledgehammer)
+          "Fallout4.esm|000FA3E8", // 火焰刀 (Shishkebab)
+          "Fallout4.esm|000FA2F6", // 齿锯 (Ripper)
+          "Fallout4.esm|00147BE4"  // 中国军官剑
+        ]
+      }
+    },
+    {
+      "Priority": 10,
+      "ReqValue": 1.0,
+      "Icon": "[Melee]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0B5"] },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0004A0A4", // WeaponTypeMelee1H
+          "Fallout4.esm|0004A0A5", // WeaponTypeMelee2H
+          "WeaponTypeMelee1H",     // 字符串双保险
+          "WeaponTypeMelee2H"
+        ],
+        "Weapons": [
+          "Fallout4.esm|0005C25F", // 警棍
+          "Fallout4.esm|0008E736", // 棒球棍
+          "Fallout4.esm|000913CA", // 战斗刀
+          "Fallout4.esm|00033FE0", // 弯刀
+          "Fallout4.esm|000FDC81", // 弹簧刀
+          "Fallout4.esm|000A01DD", // 钉板
+          "Fallout4.esm|00143AB5", // 革命剑
+          "Fallout4.esm|000FC9C3"  // 铅管
+        ]
+      }
+    },
+
+    // ==========================================
+    // 🥊 第六组：铁拳 (Iron Fist) - 徒手武器
+    // ==========================================
+    {
+      "Priority": 50,
+      "ReqValue": 3.0,
+      "Icon": "[Unarmed]",
+      "Skills": { "Perks": ["Fallout4.esm|0001DAFE"] }, // 👑 已修复：绝对正确的铁拳 ID
+      "Conditions": {
+        "MatchType": "OR",
+        "Weapons": [
+          "Fallout4.esm|0011B336", // 动力拳套
+          "Fallout4.esm|000D8576"  // 死亡爪臂铠
+        ]
+      }
+    },
+    {
+      "Priority": 10,
+      "ReqValue": 1.0,
+      "Icon": "[Unarmed]",
+      "Skills": { "Perks": ["Fallout4.esm|0001DAFE"] }, // 👑 已修复：绝对正确的铁拳 ID
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|0005240E", // WeaponTypeUnarmed
+          "Fallout4.esm|00226453", // WeaponTypeHandToHand
+          "WeaponTypeUnarmed"      // 字符串双保险
+        ],
+        "Weapons": [
+          "Fallout4.esm|0016498F", // BoxingGlove
+          "Fallout4.esm|0005524B"  // 指虎
+        ]
+      }
+    },
+
+    // ==========================================
+    // 💣 第七组：爆破专家 (Demolition Expert)
+    // ==========================================
+    {
+      "Priority": 20,
+      "ReqValue": 1.0,
+      "Icon": "[Grenade]",
+      "Skills": { "Perks": ["Fallout4.esm|0004A0DB"] }, // 🔧 已修复：0x0004A0DA 是枪支迷(Gun Nut)，爆破专家应为 0x0004A0DB
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [
+          "Fallout4.esm|00092A87", // Explosive
+          "Fallout4.esm|000B2CA9"  // Thrown
+        ],
+        "Weapons": ["Fallout4.esm|0003F6F8"] // 导弹发射器
+      }
+    }
+  ]
+}

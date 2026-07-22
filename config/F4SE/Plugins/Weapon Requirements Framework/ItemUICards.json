@@ -1,0 +1,11 @@
+{
+  "ItemUICards": {
+    "$StrengthReq": {
+      "priority": 1,
+      "anchorTarget": "CND",
+      "anchorMode": "before",
+      "fallbackAnchorTarget": "$ammo",
+      "fallbackAnchorMode": "after"
+    }
+  }
+}

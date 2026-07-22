@@ -1,0 +1,262 @@
+; 格式：Mod文件名  |  FormID = 需求值
+
+# 融合核心 (Tier 2: ECD)
+Fallout4.esm | 075FE4 = 2
+
+# 鱼叉n (Tier 5: ED0)
+DLCCoast.esm | 10B80 = 5
+
+# 信号弹 (Tier 0: ECB)
+Fallout4.esm | 1025AE = 0
+
+# 外星破坏者弹药 (Tier 0: ECB)
+Fallout4.esm | 1025AA = 0
+
+# FusionCell (Tier 1: ECC)
+# 核聚变电池 - 标准
+Fallout4.esm | 0C1897 = 1
+
+# CryoCell (Tier 0: ECB)
+# 冷冻电池 - 标准
+Fallout4.esm | 18ABE2 = 0
+DLCRobot.esm | 9E1 = 0
+
+# GammaCell (Tier 0: ECB)
+# 伽马弹 - 标准
+Fallout4.esm | 0DF279 = 0
+
+# PlasmaCartridge (Tier 2: ECD)
+# 等离子弹药 - 标准
+Fallout4.esm | 01DBB7 = 2
+
+# FlamerFuel (Tier 0: ECB)
+# 燃料 - 标准
+Fallout4.esm | 0CAC78 = 0
+Fallout4.esm | 2491A7 = 0
+DLCRobot.esm | 9D6 = 0
+
+# 10mm (Tier 1: ECC)
+# 10mm 标准弹
+Fallout4.esm | 01F276 = 1
+Fallout4.esm | 245D6A = 1
+
+# 5.56mm (Tier 2: ECD)
+# 5.56mm 标准弹
+Fallout4.esm | 01F278 = 2
+DLCRobot.esm | A15 = 2
+
+# 50 (Tier 4: ECF)
+# .50 标准弹
+Fallout4.esm | 01F279 = 4
+
+# 45 (Tier 1: ECC)
+# .45 标准弹
+Fallout4.esm | 01F66A = 1
+Fallout4.esm | 245D6B = 1
+
+# 308 (Tier 3: ECE)
+# .308 标准弹
+Fallout4.esm | 01F66B = 3
+Fallout4.esm | 245D53 = 3
+
+# 5mm (Tier 0: ECB)
+# 5mm 标准弹
+Fallout4.esm | 01F66C = 0
+Fallout4.esm | 1943D0 = 0
+
+# Shotgun (Tier 2: ECD)
+# 12号标准霰弹
+Fallout4.esm | 01F673 = 2
+
+# 38 (Tier 0: ECB)
+# .38 标准弹
+Fallout4.esm | 04CE87 = 0
+DLCCoast.esm | 54449 = 0
+
+# 44 (Tier 3: ECE)
+# .44 标准弹
+Fallout4.esm | 09221C = 3
+
+# Junk Jet (Tier 0: ECB)
+# 垃圾
+Fallout4.esm | 0E942C = 0
+
+# Cannonball (Tier 5: ED0)
+# 炮弹
+Fallout4.esm | 0FD11C = 5
+
+# RR Spike (Tier 2: ECD)
+# 铁轨钉 - 标准
+Fallout4.esm | 0FE269 = 2
+DLCRobot.esm | 9F8 = 2
+
+# 2mm EC (Tier 4: ECF)
+# 2mm 电磁弹 - 标准
+Fallout4.esm | 18ABDF = 4
+
+# Missile (Tier 5: ED0)
+# 导弹
+Fallout4.esm | 0CABA3 = 5
+Fallout4.esm | 18844F = 5
+DLCRobot.esm | A24 = 5
+
+# FatManMiniNuke (Tier 6: ED1)
+# 迷你核弹
+Fallout4.esm | 0E6B2E = 6
+DLCRobot.esm | A36 = 6
+
+# 45-70 (Tier 3: ECE)
+# .45-70 标准弹
+DLCCoast.esm | 02C8B1 = 3
+DLCCoast.esm | 04D39C = 3
+
+# Hand 762 (Tier 3: ECE)
+# 7.62mm 标准弹
+DLCNukaWorld.esm | 037897 = 3
+DLCNukaWorld.esm | 0496EB = 3
+
+# MUNITIONS
+
+# 12.7mm (Tier 3: ECE)
+# 12.7mm 标准弹
+Munitions - An Ammo Expansion.esl | FAE = 3
+
+# 14mm (Tier 4: ECF)
+# 14mm 标准弹
+Munitions - An Ammo Expansion.esl | 7EF = 4
+
+# 4 Gauge (Tier 4: ECF)
+# 4号标准霰弹
+Munitions - An Ammo Expansion.esl | 5 = 4
+
+# 8 Gauge (Tier 4: ECF)
+# 8号标准霰弹
+Munitions - An Ammo Expansion.esl | 1 = 4
+
+# 20 Gauge (Tier 2: ECD)
+# 20号标准霰弹
+Munitions - An Ammo Expansion.esl | FAC = 2
+
+# 20mm (Tier 6: ED1)
+# 20mm 标准弹
+Munitions - An Ammo Expansion.esl | 6E4 = 6
+
+# .22 (Tier 0: ECB)
+# .22 标准弹
+Munitions - An Ammo Expansion.esl | FB1 = 0
+
+# .223 (Tier 1: ECC)
+# .223 标准弹
+Munitions - An Ammo Expansion.esl | FAA = 1
+
+# .25 (Tier 1: ECC)
+# .25 标准弹
+Munitions - An Ammo Expansion.esl | 812 = 1
+
+# 25mm Grenade (Tier 4: ECF)
+# 25mm 标准榴弹
+Munitions - An Ammo Expansion.esl | FC6 = 4
+
+# 40mm Grenade (Tier 4: ECF)
+# 40mm 标准榴弹
+Munitions - An Ammo Expansion.esl | FC7 = 4
+
+# .280 (Tier 3: ECE)
+# .280 标准弹
+Munitions - An Ammo Expansion.esl | 6D8 = 3
+
+# .30 (Tier 1: ECC)
+# .30 标准弹
+Munitions - An Ammo Expansion.esl | 6D6 = 1
+
+# .30-06 (Tier 3: ECE)
+# .30-06 标准弹
+Munitions - An Ammo Expansion.esl | 6E2 = 3
+
+# .300 (Tier 3: ECE)
+# .300 马格南标准弹
+Munitions - An Ammo Expansion.esl | BB = 3
+
+# .303 (Tier 3: ECE)
+# .303 标准弹
+Munitions - An Ammo Expansion.esl | 6D7 = 3
+
+# .32 (Tier 1: ECC)
+# .32 标准弹
+Munitions - An Ammo Expansion.esl | FB0 = 1
+
+# .357 (Tier 3: ECE)
+# .357 标准弹
+Munitions - An Ammo Expansion.esl | FB2 = 3
+
+# 4.7mm (Tier 1: ECC)
+# 4.7mm 无壳标准弹
+Munitions - An Ammo Expansion.esl | 6CB = 1
+
+# .40 (Tier 1: ECC)
+# .40 标准弹
+Munitions - An Ammo Expansion.esl | 6EE = 1
+
+# .410 Gauge (Tier 1: ECC)
+# .410号标准霰弹
+Munitions - An Ammo Expansion.esl | 796 = 1
+
+# .44-40 (Tier 3: ECE)
+# .44-40 标准弹
+Munitions - An Ammo Expansion.esl | FCA = 3
+
+# .455 (Tier 3: ECE)
+# .455 标准弹
+Munitions - An Ammo Expansion.esl | 716 = 3
+
+# 5.45mm (Tier 2: ECD)
+# 5.45mm 标准弹
+Munitions - An Ammo Expansion.esl | 7A2 = 2
+
+# 5.7mm (Tier 1: ECC)
+# 5.7mm 标准弹
+Munitions - An Ammo Expansion.esl | 717 = 1
+
+# .50 Ball (Tier 4: ECF)
+# .50 球形标准弹
+Munitions - An Ammo Expansion.esl | 6CC = 4
+
+# 500 (Tier 4: ECF)
+# .500 标准弹
+Munitions - An Ammo Expansion.esl | 7F3 = 4
+
+# 6.5mm (Tier 3: ECE)
+# 6.5mm 标准弹
+Munitions - An Ammo Expansion.esl | 7A1 = 3
+
+# 7.62mm Tokarev (Tier 1: ECC)
+# 7.62mm 托卡列夫弹
+Munitions - An Ammo Expansion.esl | 6CA = 1
+
+# 7.92mm (Tier 3: ECE)
+# 7.92mm 标准弹
+Munitions - An Ammo Expansion.esl | 6E3 = 3
+
+# 9mm (Tier 1: ECC)
+# 9mm 标准弹
+Munitions - An Ammo Expansion.esl | FAF = 1
+
+# BB (Tier 0: ECB)
+# BB弹
+Munitions - An Ammo Expansion.esl | 6C8 = 0
+
+# 7.62mmR (Tier 3: ECE)
+# 7.62mm 凸缘标准弹
+Munitions - An Ammo Expansion.esl | 29 = 3
+
+# .30-30 (Tier 3: ECE)
+# .30-30 标准弹
+Munitions - An Ammo Expansion.esl | 22 = 3
+
+# FissionBattery (Tier 1: ECC)
+# 裂变电池 - 标准
+Munitions - An Ammo Expansion.esl | 58 = 1
+
+# SmallEnergyCell (Tier 1: ECC)
+# 能量电池 - 标准
+Munitions - An Ammo Expansion.esl | FD3 = 1

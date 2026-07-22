@@ -1,0 +1,122 @@
+{
+  // =====================================================================
+  // 武器需求框架 - FNV 经典特例武器力量需求大修
+  // =====================================================================
+  // 提示：带有 Weapons 数组的规则，引擎会在底层自动将其优先级提权至 9999
+  // 从而绝对碾压任何基于 Keywords 的大类规则。
+  // =====================================================================
+  "Enabled": true,
+  "Priority": 80,
+
+  "Rules": [
+    {
+      "Priority": 0,
+      "Value": 8.0,
+      "Options": {
+        "IsModifier": false,
+        "IsMultiplier": false
+      },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [],
+        "Weapons": [
+          "Fallout4.esm|000BD56F", // 胖子核弹
+          "Fallout4.esm|0001F669", // 旋转机枪
+          "Fallout4.esm|000E27BC", // 激光机枪
+          "Fallout4.esm|000D1EB0", // 高斯步枪
+          "Fallout4.esm|000FD11B"  // 舰炮
+        ]
+      }
+    },
+    {
+      "Priority": 0,
+      "Value": 7.0,
+      "Options": {
+        "IsModifier": false,
+        "IsMultiplier": false
+      },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [],
+        "Weapons": [
+          "Fallout4.esm|000FF964", // 超级大锤 (修正为原版标准 FormID)
+          "Fallout4.esm|000E5881"  // 火焰喷射器
+        ]
+      }
+    },
+    {
+      "Priority": 0,
+      "Value": 6.0,
+      "Options": {
+        "IsModifier": false,
+        "IsMultiplier": false
+      },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [],
+        "Weapons": [
+          "Fallout4.esm|000E41EB", // 大锤 (修正为原版标准 FormID)
+          "Fallout4.esm|000FE268", // 射钉步枪
+          "Fallout4.esm|000E942B"  // 垃圾喷射炮
+        ]
+      }
+    },
+    {
+      "Priority": 0,
+      "Value": 5.0,
+      "Options": {
+        "IsModifier": false,
+        "IsMultiplier": false
+      },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [],
+        "Weapons": [
+          "Fallout4.esm|0003F6F8", // 导弹发射器
+          "Fallout4.esm|0004F46A", // 猎枪
+          "Fallout4.esm|0000463F", // 突击步枪
+          "Fallout4.esm|0014831C", // 战斗霰弹枪
+          "Fallout4.esm|00092217", // 双管霰弹枪
+          "Fallout4.esm|0008E736", // 棒球棍
+          "Fallout4.esm|000CE97D"  // .44 左轮手枪
+        ]
+      }
+    },
+    {
+      "Priority": 0,
+      "Value": 4.0,
+      "Options": {
+        "IsModifier": false,
+        "IsMultiplier": false
+      },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [],
+        "Weapons": [
+          "Fallout4.esm|0011B336", // 动力拳套
+          "Fallout4.esm|000D8576", // 死亡爪臂铠
+          "Fallout4.esm|000FA2F6", // 齿锯
+          "Fallout4.esm|000FA3E8", // 火焰刀
+          "Fallout4.esm|0015B043", // 冲锋枪
+          "Fallout4.esm|0001DACF"  // 激光滑膛枪
+        ]
+      }
+    },
+    {
+      "Priority": 0,
+      "Value": 3.0,
+      "Options": {
+        "IsModifier": false,
+        "IsMultiplier": false
+      },
+      "Conditions": {
+        "MatchType": "OR",
+        "Keywords": [],
+        "Weapons": [
+          "Fallout4.esm|000DF42E", // 战斗步枪
+          "Fallout4.esm|00004822"  // 10mm 手枪
+        ]
+      }
+    }
+  ]
+}

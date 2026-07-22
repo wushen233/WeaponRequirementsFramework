@@ -1,0 +1,43 @@
+{
+  // =====================================================================
+  // 武器需求框架 (WRF) - 重量范围 → 力量需求映射表
+  // =====================================================================
+  // 此文件仅在 MCM 中选择【重量范围 JSON 驱动】模式时生效。
+  // 规则按 Priority 排序，从上到下第一个匹配重量范围的即为最终需求。
+  // 重量取自武器的当前实际重量（含改装件）。
+  // =====================================================================
+  "Enabled": true,
+  "Priority": 0,
+
+  "Rules": [
+    // 0 ~ 10 磅：轻武器（手枪、冲锋枪等）
+    { "Priority": 50, "Value": 3, "Conditions": { "MinWeight": 0,  "MaxWeight": 10 } },
+
+    // 11 ~ 15 磅：中轻武器（卡宾枪、短步枪等）
+    { "Priority": 49, "Value": 4, "Conditions": { "MinWeight": 11, "MaxWeight": 15 } },
+
+    // 16 ~ 20 磅：中型武器（标准步枪、霰弹枪等）
+    { "Priority": 48, "Value": 5, "Conditions": { "MinWeight": 16, "MaxWeight": 20 } },
+
+    // 21 ~ 25 磅：中重型武器（突击步枪、战斗霰弹枪等）
+    { "Priority": 47, "Value": 6, "Conditions": { "MinWeight": 21, "MaxWeight": 25 } },
+
+    // 26 ~ 30 磅：重型武器（轻机枪、狙击枪等）
+    { "Priority": 46, "Value": 7, "Conditions": { "MinWeight": 26, "MaxWeight": 30 } },
+
+    // 31 ~ 35 磅：超重型武器（通用机枪等）
+    { "Priority": 45, "Value": 8, "Conditions": { "MinWeight": 31, "MaxWeight": 35 } },
+
+    // 36 ~ 40 磅：重型支援武器
+    { "Priority": 44, "Value": 9, "Conditions": { "MinWeight": 36, "MaxWeight": 40 } },
+
+    // 41 ~ 45 磅：极重型武器
+    { "Priority": 43, "Value": 10, "Conditions": { "MinWeight": 41, "MaxWeight": 45 } },
+
+    // 46 ~ 50 磅：超级武器
+    { "Priority": 42, "Value": 11, "Conditions": { "MinWeight": 46, "MaxWeight": 50 } },
+
+    // 51 磅以上：终极封顶
+    { "Priority": 41, "Value": 12, "Conditions": { "MinWeight": 51 } }
+  ]
+}

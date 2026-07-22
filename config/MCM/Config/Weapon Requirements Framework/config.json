@@ -1,0 +1,382 @@
+{
+  "modName": "Weapon Requirements Framework",
+  "displayName": "$WRF_MCM_DisplayName",
+  "minMcmVersion": 2,
+  "pluginRequirements": ["Weapon Requirements Framework.esp"],
+  "content": [
+    {
+      "text": "$WRF_MCM_Title",
+      "type": "text",
+      "html": true
+    },
+    {"type": "spacer"},
+    {"text": "$WRF_MCM_SectionModControl", "type": "section"},
+    {
+      "id": "bModEnabled:Main",
+      "text": "$WRF_MCM_ModEnabled",
+      "type": "switcher",
+      "help": "$WRF_MCM_ModEnabledHelp",
+      "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+    },
+    {
+      "id": "bDebugMode:Main",
+      "text": "$WRF_MCM_DebugMode",
+      "type": "switcher",
+      "help": "$WRF_MCM_DebugModeHelp",
+      "valueOptions": {"sourceType": "ModSettingBool", "value": false}
+    }
+  ],
+  "pages": [
+    {
+      "pageDisplayName": "$WRF_MCM_PageRequirements",
+      "content": [
+        {"type": "section", "text": "$WRF_MCM_SectionStrengthMode"},
+        {
+          "id": "iStrengthCalcMode:Main",
+          "text": "$WRF_MCM_StrengthCalcMode",
+          "type": "stepper",
+          "help": "$WRF_MCM_StrengthCalcModeHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingInt",
+            "value": 0,
+            "options": ["$WRF_MCM_StrengthCalcModeOpt0", "$WRF_MCM_StrengthCalcModeOpt1"]
+          }
+        },
+        {"type": "section", "text": "$WRF_MCM_SectionAmmoRules"},
+        {
+          "id": "iAmmoCalcMode:Modifiers",
+          "text": "$WRF_MCM_AmmoCalcMode",
+          "type": "stepper",
+          "help": "$WRF_MCM_AmmoCalcModeHelp",
+          "groupControl": 25,
+          "valueOptions": {
+            "sourceType": "ModSettingInt",
+            "value": 0,
+            "options": ["$WRF_MCM_AmmoCalcModeOpt0", "$WRF_MCM_AmmoCalcModeOpt1"]
+          }
+        },
+        {
+          "id": "bEnableAmmoReq:Modifiers",
+          "text": "$WRF_MCM_AmmoReqEnabled",
+          "help": "$WRF_MCM_AmmoReqEnabledHelp",
+          "groupControl": 20,
+          "type": "switcher",
+          "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+        },
+        {
+          "id": "bAmmoReqAlwaysActive:Modifiers",
+          "text": "$WRF_MCM_AmmoReqAlwaysActive",
+          "help": "$WRF_MCM_AmmoReqAlwaysActiveHelp",
+          "groupCondition": 20,
+          "groupControl": 21,
+          "type": "switcher",
+          "valueOptions": {"sourceType": "ModSettingBool", "value": false}
+        },
+        {
+          "id": "bEnableCustomAmmoReq:Modifiers",
+          "text": "$WRF_MCM_CustomAmmoReq",
+          "help": "$WRF_MCM_CustomAmmoReqHelp",
+          "groupCondition": 25,
+          "groupControl": 22,
+          "type": "switcher",
+          "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+        },
+        {
+          "id": "bAmmoReqCompensation:Modifiers",
+          "text": "$WRF_MCM_AmmoReqCompensation",
+          "help": "$WRF_MCM_AmmoReqCompensationHelp",
+          "groupCondition": 20,
+          "groupControl": 23,
+          "type": "switcher",
+          "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+        },
+        {
+          "id": "iReq_AmmoBase:Requirements",
+          "text": "$WRF_MCM_AmmoBaseReq",
+          "help": "$WRF_MCM_AmmoBaseReqHelp",
+          "groupCondition": 25,
+          "groupControl": 24,
+          "type": "slider",
+          "valueOptions": {
+            "sourceType": "ModSettingInt",
+            "min": 0,
+            "max": 10,
+            "step": 1,
+            "value": 0
+          }
+        },
+        {"type": "section", "text": "$WRF_MCM_SectionSkillMode"},
+        {
+          "id": "iSkillCalcMode:Main",
+          "text": "$WRF_MCM_SkillCalcMode",
+          "type": "stepper",
+          "help": "$WRF_MCM_SkillCalcModeHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingInt",
+            "value": 0,
+            "options": ["$WRF_MCM_SkillCalcModeOpt0", "$WRF_MCM_SkillCalcModeOpt1"]
+          }
+        },
+        {"type": "section", "text": "$WRF_MCM_SectionPerkReduction"},
+        {
+          "id": "bHeavyGunnerReduction:Reductions",
+          "text": "$WRF_MCM_HeavyGunnerReduction",
+          "help": "$WRF_MCM_HeavyGunnerReductionHelp",
+          "type": "switcher",
+          "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "$WRF_MCM_PageMovement",
+      "content": [
+        {"type": "text", "text": "$WRF_MCM_MovementText", "html": true},
+        {"type": "section", "text": "$WRF_MCM_SectionMovePenalty"},
+        {
+          "id": "bGatedSprint:Movement",
+          "text": "$WRF_MCM_GatedSprint",
+          "type": "switcher",
+          "help": "$WRF_MCM_GatedSprintHelp",
+          "groupControl": 1,
+          "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+        },
+        {
+          "id": "bGatedRun:Movement",
+          "text": "$WRF_MCM_GatedRun",
+          "type": "switcher",
+          "help": "$WRF_MCM_GatedRunHelp",
+          "groupCondition": 1,
+          "groupControl": 2,
+          "valueOptions": {"sourceType": "ModSettingBool", "value": false}
+        },
+        {
+          "id": "iGatedThreshold:Movement",
+          "text": "$WRF_MCM_GatedThreshold",
+          "type": "slider",
+          "help": "$WRF_MCM_GatedThresholdHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingInt",
+            "min": 0,
+            "max": 10,
+            "step": 1,
+            "value": 2
+          }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "$WRF_MCM_PagePowerArmor",
+      "content": [
+        {"type": "text", "text": "$WRF_MCM_PAText", "html": true},
+        {"type": "section", "text": "$WRF_MCM_SectionPARestrictions"},
+        {
+          "id": "bPASoftGateEnabled:PowerArmor",
+          "text": "$WRF_MCM_PASoftGate",
+          "type": "switcher",
+          "help": "$WRF_MCM_PASoftGateHelp",
+          "groupControl": 1,
+          "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+        },
+        {
+          "id": "iPenaltyMode:PowerArmor",
+          "text": "$WRF_MCM_PAPenaltyMode",
+          "type": "stepper",
+          "help": "$WRF_MCM_PAPenaltyModeHelp",
+          "groupCondition": 1,
+          "groupControl": 2,
+          "valueOptions": {
+            "sourceType": "ModSettingInt",
+            "value": 0,
+            "options": ["$WRF_MCM_PAPenaltyModeOpt0", "$WRF_MCM_PAPenaltyModeOpt1"]
+          }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "$WRF_MCM_PageUI",
+      "content": [
+        {"type": "section", "text": "$WRF_MCM_SectionUI"},
+        {
+          "id": "bShowUI:UI",
+          "text": "$WRF_MCM_ShowUI",
+          "type": "switcher",
+          "help": "$WRF_MCM_ShowUIHelp",
+          "groupControl": 1,
+          "valueOptions": {"sourceType": "ModSettingBool", "value": true}
+        },
+        {
+          "id": "iUIDamageDisplayMode:UI",
+          "text": "$WRF_MCM_UIDamageDisplayMode",
+          "type": "stepper",
+          "help": "$WRF_MCM_UIDamageDisplayModeHelp",
+          "groupCondition": 1,
+          "groupControl": 2,
+          "valueOptions": {
+            "sourceType": "ModSettingInt",
+            "Value": 0,
+            "options": ["$WRF_MCM_UIDamageDisplayModeOpt0", "$WRF_MCM_UIDamageDisplayModeOpt1", "$WRF_MCM_UIDamageDisplayModeOpt2"]
+          }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "$WRF_MCM_PagePenalties",
+      "content": [
+        {
+          "type": "text",
+          "text": "$WRF_MCM_PenaltiesIntroText",
+          "html": true
+        },
+        {"type": "section", "text": "$WRF_MCM_SectionSkillDamageFormula"},
+        {
+          "type": "text",
+          "text": "$WRF_MCM_SkillDamageFormulaDesc",
+          "html": true
+        },
+        {
+          "id": "fSkillDamageBase:Penalties",
+          "text": "$WRF_MCM_SkillDamageBase",
+          "type": "slider",
+          "help": "$WRF_MCM_SkillDamageBaseHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.50,
+            "min": 0.10,
+            "max": 2.00,
+            "step": 0.05
+          }
+        },
+        {
+          "id": "fSkillDamageMax:Penalties",
+          "text": "$WRF_MCM_SkillDamageMax",
+          "type": "slider",
+          "help": "$WRF_MCM_SkillDamageMaxHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 1.00,
+            "min": 0.50,
+            "max": 3.00,
+            "step": 0.05
+          }
+        },
+        {"type": "section", "text": "$WRF_MCM_SectionStrengthPenalty"},
+        {
+          "type": "text",
+          "text": "$WRF_MCM_StrengthPenaltyDesc",
+          "html": true
+        },
+        {
+          "id": "fSwayDynCoef:Penalties",
+          "text": "$WRF_MCM_SwayDynCoef",
+          "type": "slider",
+          "help": "$WRF_MCM_SwayDynCoefHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.25,
+            "min": -2.0,
+            "max": 5.0,
+            "step": 0.05
+          }
+        },
+        {
+          "id": "fSpreadDynCoef:Penalties",
+          "text": "$WRF_MCM_SpreadDynCoef",
+          "type": "slider",
+          "help": "$WRF_MCM_SpreadDynCoefHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.20,
+            "min": -2.0,
+            "max": 5.0,
+            "step": 0.05
+          }
+        },
+        {
+          "id": "fMeleeStrPenaltyMult:Penalties",
+          "text": "$WRF_MCM_MeleeStrPenaltyMult",
+          "type": "slider",
+          "help": "$WRF_MCM_MeleeStrPenaltyMultHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.15,
+            "min": -2.0,
+            "max": 2.0,
+            "step": 0.01
+          }
+        },
+        {"type": "section", "text": "$WRF_MCM_SectionSkillPenalty"},
+        {
+          "type": "text",
+          "text": "$WRF_MCM_SkillPenaltyDesc",
+          "html": true
+        },
+        {
+          "id": "fGunDamageDynCoef:Penalties",
+          "text": "$WRF_MCM_GunDamageDynCoef",
+          "type": "slider",
+          "help": "$WRF_MCM_GunDamageDynCoefHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.00,
+            "min": -2.0,
+            "max": 2.0,
+            "step": 0.01
+          }
+        },
+        {
+          "id": "fThrownDamageDynCoef:Penalties",
+          "text": "$WRF_MCM_ThrownDamageDynCoef",
+          "type": "slider",
+          "help": "$WRF_MCM_ThrownDamageDynCoefHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.00,
+            "min": -2.0,
+            "max": 2.0,
+            "step": 0.01
+          }
+        },
+        {
+          "id": "fVATSAccuracyDynCoef:Penalties",
+          "text": "$WRF_MCM_VATSAccuracyDynCoef",
+          "type": "slider",
+          "help": "$WRF_MCM_VATSAccuracyDynCoefHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.10,
+            "min": -2.0,
+            "max": 2.0,
+            "step": 0.01
+          }
+        },
+        {
+          "id": "fMeleeSkillPenaltyMult:Penalties",
+          "text": "$WRF_MCM_MeleeSkillPenaltyMult",
+          "type": "slider",
+          "help": "$WRF_MCM_MeleeSkillPenaltyMultHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.10,
+            "min": -2.0,
+            "max": 2.0,
+            "step": 0.01
+          }
+        },
+        {"type": "section", "text": "$WRF_MCM_SectionBottomLimits"},
+        {
+          "id": "fDamageMinLimit:Penalties",
+          "text": "$WRF_MCM_DamageMinLimit",
+          "type": "slider",
+          "help": "$WRF_MCM_DamageMinLimitHelp",
+          "valueOptions": {
+            "sourceType": "ModSettingFloat",
+            "Value": 0.1,
+            "min": 0.01,
+            "max": 1.0,
+            "step": 0.01
+          }
+        }
+      ]
+    }
+  ]
+}

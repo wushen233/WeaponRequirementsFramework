@@ -1,0 +1,300 @@
+{
+  "Enabled": true,
+  "Priority": 0,
+
+  "Rules": [
+    // ==========================================================
+    // 手枪 Pistols (S7_SkillPistols)
+    // ==========================================================
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000CE97D", "Fallout4.esm|000DC8E7", "Fallout4.esm|000E1703"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|00004822", "Fallout4.esm|0004562F", "Fallout4.esm|0005C250",
+        "Fallout4.esm|00066B36"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "AnimsGripPistol", "WeaponTypePistol"
+      ]}
+    },
+    {
+      "Priority": 30, "ReqValue": 0.0, "Icon": "[Pistol]",
+      "Skills": { "ActorValues": ["S7_SkillPistols"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0014831B", "Fallout4.esm|0014D09E", "Fallout4.esm|00024F55"
+      ]}
+    },
+
+    // ==========================================================
+    // 步枪 Rifles (S7_SkillRifles)
+    // ==========================================================
+    {
+      "Priority": 100, "ReqValue": 100.0, "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000D1EB0"
+      ]}
+    },
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0000463F", "Fallout4.esm|000FE268", "Fallout4.esm|0014831C"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000DF42E", "Fallout4.esm|0015B043"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Rifle]",
+      "Skills": { "ActorValues": ["S7_SkillRifles"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "AnimsGripRifleStraight", "AnimsGripRifleAssault",
+        "WeaponTypeRifle", "WeaponTypeAssaultRifle"
+      ]}
+    },
+
+    // ==========================================================
+    // 霰弹枪 Shotguns (S7_SkillShotguns)
+    // ==========================================================
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Shotgun]",
+      "Skills": { "ActorValues": ["S7_SkillShotguns"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0014831C"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Shotgun]",
+      "Skills": { "ActorValues": ["S7_SkillShotguns"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|00092217"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Shotgun]",
+      "Skills": { "ActorValues": ["S7_SkillShotguns"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "animsDoubleBarrelShotgun", "AnimsCombatShotgun", "WeaponTypeShotgun"
+      ]}
+    },
+
+    // ==========================================================
+    // 自动武器 Automatics (S7_SkillAutomatics)
+    // ==========================================================
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Auto]",
+      "Skills": { "ActorValues": ["S7_SkillAutomatics"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0000463F", "Fallout4.esm|00066B36"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Auto]",
+      "Skills": { "ActorValues": ["S7_SkillAutomatics"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0015B043"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Auto]",
+      "Skills": { "ActorValues": ["S7_SkillAutomatics"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "AnimsSubmachineGun", "WeaponTypeAutomatic"
+      ]}
+    },
+
+    // ==========================================================
+    // 狙击 Sniping (S7_SkillSniping)
+    // ==========================================================
+    {
+      "Priority": 100, "ReqValue": 100.0, "Icon": "[Sniper]",
+      "Skills": { "ActorValues": ["S7_SkillSniping"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000D1EB0"
+      ]}
+    },
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Sniper]",
+      "Skills": { "ActorValues": ["S7_SkillSniping"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0004F46A", "Fallout4.esm|0014831A"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Sniper]",
+      "Skills": { "ActorValues": ["S7_SkillSniping"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "WeaponTypeSniper"
+      ]}
+    },
+
+    // ==========================================================
+    // 重武器 HeavyWeaponry (S7_SkillHeavyWeaponry)
+    // ==========================================================
+    {
+      "Priority": 100, "ReqValue": 100.0, "Icon": "[Minigun]",
+      "Skills": { "ActorValues": ["S7_SkillHeavyWeaponry"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000BD56F", "Fallout4.esm|0003F6F8"
+      ]}
+    },
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Minigun]",
+      "Skills": { "ActorValues": ["S7_SkillHeavyWeaponry"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0001F669", "Fallout4.esm|000E27BC", "Fallout4.esm|000E5881",
+        "Fallout4.esm|000E942B", "Fallout4.esm|00171B2B"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Minigun]",
+      "Skills": { "ActorValues": ["S7_SkillHeavyWeaponry"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "WeaponTypeHeavyGun", "WeaponTypeJunkJet", "WeaponTypeCryolater"
+      ]}
+    },
+
+    // ==========================================================
+    // 能量武器 EnergyWeapons (S7_SkillEnergyWeapons)
+    // ==========================================================
+    {
+      "Priority": 100, "ReqValue": 100.0, "Icon": "[Energy]",
+      "Skills": { "ActorValues": ["S7_SkillEnergyWeapons"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000FF995", "Fallout4.esm|000D1EB0"
+      ]}
+    },
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Energy]",
+      "Skills": { "ActorValues": ["S7_SkillEnergyWeapons"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "WeaponTypePlasma", "Fallout4.esm|001CC462"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Energy]",
+      "Skills": { "ActorValues": ["S7_SkillEnergyWeapons"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0009983B", "Fallout4.esm|0007B237", "Fallout4.esm|0005C247"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Energy]",
+      "Skills": { "ActorValues": ["S7_SkillEnergyWeapons"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "WeaponTypeLaser", "modskill_EnergyGuns",
+        "WeaponTypeGammaGun", "WeaponTypeLaserMusket",
+        "WeaponTypeAlienBlaster"
+      ]}
+    },
+
+    // ==========================================================
+    // 爆炸物 Explosives (S7_SkillExplosives)
+    // ==========================================================
+    {
+      "Priority": 100, "ReqValue": 100.0, "Icon": "[Grenade]",
+      "Skills": { "ActorValues": ["S7_SkillExplosives"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000BD56F", "Fallout4.esm|0003F6F8"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Grenade]",
+      "Skills": { "ActorValues": ["S7_SkillExplosives"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000FD11B"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Grenade]",
+      "Skills": { "ActorValues": ["S7_SkillExplosives"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "WeaponTypeExplosive", "WeaponTypeThrown",
+        "Fallout4.esm|00092A87", "Fallout4.esm|000B2CA9"
+      ]}
+    },
+
+    // ==========================================================
+    // 近战 Melee (S7_SkillMelee)
+    // ==========================================================
+    {
+      "Priority": 100, "ReqValue": 100.0, "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000FF964"
+      ]}
+    },
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000FA3E8", "Fallout4.esm|000E7AB9", "Fallout4.esm|000FA2F6",
+        "Fallout4.esm|00147BE4"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "WeaponTypeMelee1H", "WeaponTypeMelee2H", "WeaponTypeRipper"
+      ]}
+    },
+    {
+      "Priority": 30, "ReqValue": 0.0, "Icon": "[Melee]",
+      "Skills": { "ActorValues": ["S7_SkillMelee"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0008C14D", "Fallout4.esm|0008E736", "Fallout4.esm|000913CA",
+        "Fallout4.esm|00033FE0", "Fallout4.esm|000A01DD", "Fallout4.esm|000FDC81",
+        "Fallout4.esm|00143AB5", "Fallout4.esm|000FC9C3"
+      ]}
+    },
+
+    // ==========================================================
+    // 徒手 Unarmed (S7_SkillUnarmed)
+    // ==========================================================
+    {
+      "Priority": 75, "ReqValue": 75.0, "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|000D8576"
+      ]}
+    },
+    {
+      "Priority": 50, "ReqValue": 50.0, "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0011B336"
+      ]}
+    },
+    {
+      "Priority": 25, "ReqValue": 25.0, "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": { "MatchType": "OR", "Keywords": [
+        "WeaponTypeUnarmed", "WeaponTypeHandToHand"
+      ]}
+    },
+    {
+      "Priority": 30, "ReqValue": 0.0, "Icon": "[Unarmed]",
+      "Skills": { "ActorValues": ["S7_SkillUnarmed"] },
+      "Conditions": { "MatchType": "OR", "Weapons": [
+        "Fallout4.esm|0016498F", "Fallout4.esm|0005524B"
+      ]}
+    }
+  ]
+}

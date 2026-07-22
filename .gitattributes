@@ -1,0 +1,11 @@
+* text=auto
+*.cpp text eol=lf
+*.h text eol=lf
+*.json text eol=lf
+*.ini text eol=crlf
+*.lua text eol=lf
+*.md text eol=lf
+*.psc text eol=crlf
+*.ps1 text eol=crlf
+*.txt text eol=crlf
+src/xbyak/** whitespace=-blank-at-eol,-space-before-tab
