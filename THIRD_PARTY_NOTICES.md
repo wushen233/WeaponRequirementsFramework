@@ -26,7 +26,7 @@ at commit `f0b1670ee9caac2e349497f6f3c08a69633a8ea7`. `commonlib-shared` is
 distributed under GPL-3.0 with a Modding Exception. The exception permits
 Modded Code to link with `commonlib-shared` without causing that Modded Code to
 be covered by the GPL. Project-authored source in this repository therefore
-remains under the repository MIT License.
+is distributed under the repository GPL-3.0-only license.
 
 Copies of the applicable GPL-3.0 text and Modding Exception are retained in
 `licenses/commonlib-shared/LICENSE` and `licenses/commonlib-shared/EXCEPTIONS`.
