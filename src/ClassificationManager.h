@@ -39,6 +39,7 @@ namespace WRF::Classification
     void Load();
     Result Evaluate(RE::TESBoundObject* a_object, RE::ExtraDataList* a_extraList);
     Result Evaluate(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance);
+    bool HasAnyCategory(const Result& a_result, const std::vector<std::string>& a_categories);
     bool HasCategory(RE::TESBoundObject* a_object, RE::ExtraDataList* a_extraList, std::string_view a_category);
     bool HasCategory(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance, std::string_view a_category);
     bool HasAnyCategory(RE::TESBoundObject* a_object, RE::ExtraDataList* a_extraList, const std::vector<std::string>& a_categories);

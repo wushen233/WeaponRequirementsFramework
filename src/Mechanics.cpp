@@ -83,14 +83,12 @@ namespace WRF::Mechanics
 			(cfg->FurnitureTypePowerArmor && a_actor->HasKeyword(cfg->FurnitureTypePowerArmor));
 	}
 
-	int GetWeaponCategory(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
+	static int GetWeaponCategoryFor(const Classification::Result& categories, RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
 		if (!a_weapon) return 0;
-		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Unarmed")) return 1;
-		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Melee1H") ||
-			Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Melee2H")) return 2;
-		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Pistol") ||
-			Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Rifle") ||
-			Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Heavy")) return 3;
+		if (categories.Has("Weapon.Handling.Unarmed")) return 1;
+		if (categories.Has("Weapon.Handling.Melee1H") || categories.Has("Weapon.Handling.Melee2H")) return 2;
+		if (categories.Has("Weapon.Handling.Pistol") || categories.Has("Weapon.Handling.Rifle") ||
+			categories.Has("Weapon.Handling.Heavy")) return 3;
 		auto weapData = a_instance ? static_cast<RE::TESObjectWEAP::InstanceData*>(a_instance) : &a_weapon->weaponData;
 		auto wType = static_cast<std::uint32_t>(weapData->type.get());
 		if (wType == 10 || wType == 11) return 4; // Grenade/Mine
@@ -103,6 +101,11 @@ namespace WRF::Mechanics
 		return 0;
 	}
 
+	int GetWeaponCategory(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
+		if (!a_weapon) return 0;
+		return GetWeaponCategoryFor(Classification::Evaluate(a_weapon, a_instance), a_weapon, a_instance);
+	}
+
 	int GetPAWeaponState(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
 		auto cfg = Config::GetSingleton();
 		if (!a_weapon) return 0;
@@ -112,14 +115,19 @@ namespace WRF::Mechanics
 		return 0;
 	}
 
-	bool IsHeavyWeapon(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
+	static bool IsHeavyWeaponFor(const Classification::Result& categories, RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
 		auto cfg = Config::GetSingleton();
-		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Heavy")) return true;
+		if (a_weapon && categories.Has("Weapon.Handling.Heavy")) return true;
 		return a_weapon && (HasKeyword(a_weapon, a_instance, cfg->WeaponTypeHeavyGun) || HasKeyword(a_weapon, a_instance, cfg->WeaponTypeMinigun) ||
 			HasKeyword(a_weapon, a_instance, cfg->WeaponTypeGatlingLaser) || HasKeyword(a_weapon, a_instance, cfg->WeaponTypeFatMan) ||
 			HasKeyword(a_weapon, a_instance, cfg->WeaponTypeMissileLauncher) || HasKeyword(a_weapon, a_instance, cfg->WeaponTypeFlamer) ||
 			HasKeyword(a_weapon, a_instance, cfg->WeaponTypeJunkJet) || HasKeyword(a_weapon, a_instance, cfg->WeaponTypeCryolator) ||
 			HasKeyword(a_weapon, a_instance, cfg->WeaponTypeBroadsider));
+	}
+
+	bool IsHeavyWeapon(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
+		if (!a_weapon) return false;
+		return IsHeavyWeaponFor(Classification::Evaluate(a_weapon, a_instance), a_weapon, a_instance);
 	}
 
 	int GetAmmoRequirement(RE::TESForm* a_item) {
@@ -175,8 +183,9 @@ namespace WRF::Mechanics
 				cfg->CustomSkillMappings.size());
 		}
 
+		const auto categories = Classification::Evaluate(a_weapon, a_instance);
 		for (const auto& mapping : cfg->CustomSkillMappings) {
-			bool isMatch = Classification::HasAnyCategory(a_weapon, a_instance, mapping.categories);
+			bool isMatch = Classification::HasAnyCategory(categories, mapping.categories);
 			if (isMatch) {
 				if (!mapping.skillAVs.empty()) {
 					float maxSkill = 0.0f; RE::ActorValueInfo* bestAV = mapping.skillAVs[0];
@@ -216,7 +225,8 @@ namespace WRF::Mechanics
 
 	float CalculateRequirement(RE::Actor* a_actor, RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance, bool a_includeAmmo) {
 		if (!a_weapon) return 0.0f;
-		if (GetWeaponCategory(a_weapon, a_instance) == 4) return -1.0f;
+		const auto categories = Classification::Evaluate(a_weapon, a_instance);
+		if (GetWeaponCategoryFor(categories, a_weapon, a_instance) == 4) return -1.0f;
 		auto cfg = Config::GetSingleton();
 		bool debug = cfg->bDebugMode;
 
@@ -229,7 +239,7 @@ namespace WRF::Mechanics
 
 		float baseReq = -1.0f, addMod = 0.0f, multMod = 1.0f;
 		for (const auto& rule : cfg->CustomStrengthMappings) {
-			bool isMatch = !rule.categories.empty() && Classification::HasAnyCategory(a_weapon, a_instance, rule.categories);
+			bool isMatch = !rule.categories.empty() && Classification::HasAnyCategory(categories, rule.categories);
 			if (!isMatch) isMatch = std::find(rule.weapons.begin(), rule.weapons.end(), a_weapon) != rule.weapons.end();
 			if (!isMatch) continue;
 			if (rule.isModifier) {
@@ -266,7 +276,7 @@ namespace WRF::Mechanics
 			}
 		}
 
-		if (cfg->bHeavyGunnerReduction && IsHeavyWeapon(a_weapon, a_instance) && a_actor) {
+		if (cfg->bHeavyGunnerReduction && IsHeavyWeaponFor(categories, a_weapon, a_instance) && a_actor) {
 			int rank = 0;
 			if (cfg->PerkHeavyGunner5 && a_actor->GetPerkRank(cfg->PerkHeavyGunner5) > 0) rank = 5;
 			else if (cfg->PerkHeavyGunner4 && a_actor->GetPerkRank(cfg->PerkHeavyGunner4) > 0) rank = 4;
@@ -497,121 +507,6 @@ namespace WRF::Mechanics
 		}
 	}
 
-	class CoreHooks {
-	public:
-		static void HookInput(RE::BSInputEventReceiver* a_this, const RE::InputEvent* a_head) {
-			auto cfg = Config::GetSingleton();
-			if (cfg->bModEnabled && a_head) {
-				static bool s_wasMov = false;
-				RE::PlayerCharacter* player = nullptr;
-				bool movementChecked = false;
-				bool curMov = false;
-
-				for (auto e = a_head; e; e = e->next) {
-					if (e->eventType == RE::INPUT_EVENT_TYPE::kButton) {
-						auto bEvent = static_cast<const RE::ButtonEvent*>(e);
-						if (!bEvent->strUserEvent.empty()) {
-							if (!player) {
-								player = RE::PlayerCharacter::GetSingleton();
-								if (!player) break;
-							}
-							if (!movementChecked) {
-								curMov = IsPlayerMoving();
-								if (curMov && !s_wasMov) {
-									if (s_isCurrentlyGated && IsPlayerTryingToSprint()) TryShowSprintMsg();
-									if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); });
-								}
-								s_wasMov = curMov;
-								movementChecked = true;
-							}
-							std::string key = bEvent->strUserEvent.c_str();
-
-							// 核心逻辑：拦截攻击输入
-							if ((key == "PrimaryAttack" || key == "RightAttack") && bEvent->value != 0) {
-								// 判断当前时间是否在封锁期内
-								if (std::chrono::steady_clock::now() < s_attackLockoutUntil.load()) {
-									const_cast<RE::ButtonEvent*>(bEvent)->value = 0.0f; // 拦截输入
-									if (cfg->bDebugMode) REX::INFO("[WRF Debug] 攻击输入被拦截 (力量不足)"); // 可选：打印拦截日志
-								}
-							}
-
-							bool hold = (bEvent->value != 0); bool first = false;
-							if (hold) { if (!s_heldKeys.count(key)) { first = true; s_heldKeys.insert(key); } }
-							else s_heldKeys.erase(key);
-							bool drawn = player->GetWeaponMagicDrawn();
-
-							if ((key == "PrimaryAttack" || key == "RightAttack") && drawn && cfg->bPASoftGateEnabled && IsPlayerInPowerArmor(player)) {
-								RE::TESObjectWEAP* w = nullptr; RE::TBO_InstanceData* i = nullptr;
-								if (GetEquippedMainWeapon(player, w, i) && GetPAWeaponState(w, i) == 1) {
-									if (cfg->iPenaltyMode == 0) {
-										if (first) RE::SendHUDMessage::ShowHUDMessage("$PowerArmorWeaponRestrictionsMSG", "WRF_WeaponJamSound", false, true);
-										const_cast<RE::ButtonEvent*>(bEvent)->value = 0.0f;
-									}
-									else if (cfg->iPenaltyMode == 1) {
-										const_cast<RE::ButtonEvent*>(bEvent)->strUserEvent = cfg->strControl_Melee;
-									}
-								}
-							}
-							if (key == "Sprint" && first && s_isCurrentlyGated && curMov) TryShowSprintMsg();
-							if (first && (key == "ReadyWeapon" || ((key == "PrimaryAttack" || key == "RightAttack") && !drawn))) {
-								std::thread([]() { std::this_thread::sleep_for(std::chrono::milliseconds(150)); if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); }); }).detach();
-							}
-						}
-					}
-				}
-			}
-			_PerformInputProcessing(a_this, a_head);
-			// With no run gate or recovery stop active, the idle input path has
-			// nothing to clamp. Avoid touching PlayerControls every input tick.
-			if (cfg->bModEnabled && (s_isRunGated || g_tripFrames.load() > 0)) {
-				if (auto pc = RE::PlayerControls::GetSingleton()) {
-					if (s_isRunGated) {
-						float mag = std::sqrt(pc->data.moveInputVec.x * pc->data.moveInputVec.x + pc->data.moveInputVec.y * pc->data.moveInputVec.y);
-						if (mag > 0.4f) { pc->data.moveInputVec.x *= (0.4f / mag); pc->data.moveInputVec.y *= (0.4f / mag); }
-					}
-					else if (g_tripFrames > 0) { pc->data.moveInputVec.x = pc->data.moveInputVec.y = 0; g_tripFrames--; }
-				}
-			}
-		}
-
-		static RE::BSEventNotifyControl HookProcessAnim(RE::BSTEventSink<RE::BSAnimationGraphEvent>* a_this, const RE::BSAnimationGraphEvent& a_event, RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_src)
-		{
-			// 🎯 核心修复：捕获拔/收武器事件，记录冲刺状态快照
-			if (a_event.tag == "weaponDraw" || a_event.tag == "weaponSheathe" || a_event.tag == "heavyWeaponDraw") {
-				s_recentSprintSnapshot = IsPlayerTryingToSprint();
-				std::thread([]() { std::this_thread::sleep_for(std::chrono::milliseconds(50)); if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); }); }).detach();
-			}
-
-			if (a_event.tag == "BeginMeleeAttack") {
-				auto player = RE::PlayerCharacter::GetSingleton();
-				auto cfg = Config::GetSingleton();
-				if (!player) {
-					return _ProcessAnim(a_this, a_event, a_src);
-				}
-				float deficit = GetStrengthDeficit(player);
-
-				// 调试：打印当前的缺口值，确认逻辑是否被触发
-				if (cfg->bDebugMode) REX::INFO("[WRF Debug] 攻击开始, 当前力量缺口: {:.2f}, 使用的惩罚系数: {:.2f}", deficit, cfg->fMeleeStrPenaltyMult);
-
-				if (deficit > 0.0f) {
-					// 使用 MCM 中的 fMeleeStrPenaltyMult 作为惩罚系数
-					float penaltyTime = deficit * cfg->fMeleeStrPenaltyMult;
-
-					// 只有当惩罚时间达到一定阈值（比如 0.1s）才锁定，避免轻微惩罚造成的手感断层
-					if (penaltyTime > 0.1f) {
-						s_attackLockoutUntil = std::chrono::steady_clock::now() + std::chrono::milliseconds(static_cast<int>(penaltyTime * 1000));
-						if (cfg->bDebugMode) REX::INFO("[WRF Debug] 施加攻击粘滞: {:.2f}s", penaltyTime);
-					}
-				}
-			}
-
-			return _ProcessAnim(a_this, a_event, a_src);
-		}
-
-		static inline void(*_PerformInputProcessing)(RE::BSInputEventReceiver*, const RE::InputEvent*) = nullptr;
-		static inline decltype(&HookProcessAnim) _ProcessAnim = nullptr;
-	};
-
 	class MenuEquipEvents : public RE::BSTEventSink<RE::MenuOpenCloseEvent>, public RE::BSTEventSink<RE::ActorEquipManagerEvent::Event> {
 	public:
 		RE::BSEventNotifyControl ProcessEvent(const RE::MenuOpenCloseEvent&, RE::BSTEventSource<RE::MenuOpenCloseEvent>*) override {
@@ -636,6 +531,10 @@ namespace WRF::Mechanics
 	public:
 		explicit WRFInputHandler(RE::PlayerControlsData& a_data) : RE::PlayerInputHandler(a_data) {}
 
+		bool ShouldHandleEvent(const RE::InputEvent* a_event) override {
+			return inputEventHandlingEnabled && a_event && a_event->eventType == RE::INPUT_EVENT_TYPE::kButton;
+		}
+
 		void OnButtonEvent(const RE::ButtonEvent* a_event) override {
 			auto cfg = Config::GetSingleton();
 			if (!cfg->bModEnabled || !a_event || a_event->strUserEvent.empty()) return;
@@ -653,11 +552,6 @@ namespace WRF::Mechanics
 
 			const std::string key = a_event->strUserEvent.c_str();
 			auto event = const_cast<RE::ButtonEvent*>(a_event);
-			if ((key == "PrimaryAttack" || key == "RightAttack") && event->value != 0 &&
-				std::chrono::steady_clock::now() < s_attackLockoutUntil.load()) {
-				event->value = 0.0f;
-				if (cfg->bDebugMode) REX::INFO("[WRF Debug] 攻击输入被拦截 (力量不足)");
-			}
 
 			const bool hold = event->value != 0;
 			bool first = false;
@@ -668,6 +562,20 @@ namespace WRF::Mechanics
 			}
 
 			const bool drawn = player->GetWeaponMagicDrawn();
+			const bool attackInput = (key == "PrimaryAttack" || key == "RightAttack") && hold;
+			const auto now = std::chrono::steady_clock::now();
+			if (attackInput && drawn) {
+				RE::TESObjectWEAP* weapon = nullptr;
+				RE::TBO_InstanceData* instance = nullptr;
+				if (GetEquippedMainWeapon(player, weapon, instance)) {
+					const int category = GetWeaponCategory(weapon, instance);
+					if ((category == 1 || category == 2) && now < s_attackLockoutUntil.load()) {
+						event->value = 0.0f;
+						if (cfg->bDebugMode) REX::INFO("[WRF Debug] 攻击输入被拦截 (力量不足)");
+					}
+				}
+			}
+
 			if ((key == "PrimaryAttack" || key == "RightAttack") && drawn && cfg->bPASoftGateEnabled && IsPlayerInPowerArmor(player)) {
 				RE::TESObjectWEAP* w = nullptr; RE::TBO_InstanceData* i = nullptr;
 				if (GetEquippedMainWeapon(player, w, i) && GetPAWeaponState(w, i) == 1) {
@@ -680,6 +588,24 @@ namespace WRF::Mechanics
 				}
 			}
 
+			// Start recovery only for a fresh attack press that remains allowed after
+			// the power-armor soft gate. Undrawn presses only request a weapon draw.
+			if (attackInput && drawn && first && event->value != 0.0f) {
+				RE::TESObjectWEAP* weapon = nullptr;
+				RE::TBO_InstanceData* instance = nullptr;
+				if (GetEquippedMainWeapon(player, weapon, instance)) {
+					const int category = GetWeaponCategory(weapon, instance);
+					if (category == 1 || category == 2) {
+						const float deficit = GetStrengthDeficit(player, weapon, instance);
+						const float penaltyTime = deficit * cfg->fMeleeStrPenaltyMult;
+						if (penaltyTime > 0.1f) {
+							s_attackLockoutUntil = now + std::chrono::milliseconds(static_cast<int>(penaltyTime * 1000));
+							if (cfg->bDebugMode) REX::INFO("[WRF Debug] 输入阶段施加攻击粘滞: {:.2f}s", penaltyTime);
+						}
+					}
+				}
+			}
+
 			if (key == "Sprint" && first && s_isCurrentlyGated && curMoving) TryShowSprintMsg();
 			if (first && (key == "ReadyWeapon" || ((key == "PrimaryAttack" || key == "RightAttack") && !drawn))) {
 				std::thread([]() { std::this_thread::sleep_for(std::chrono::milliseconds(150)); if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); }); }).detach();
@@ -688,7 +614,24 @@ namespace WRF::Mechanics
 
 		void PerFrameUpdate() override {
 			auto cfg = Config::GetSingleton();
-			if (!cfg->bModEnabled || (!s_isRunGated && g_tripFrames.load() <= 0)) return;
+			if (!cfg->bModEnabled) return;
+
+			if (auto player = RE::PlayerCharacter::GetSingleton()) {
+				static bool hasDrawState = false;
+				static bool wasWeaponDrawn = false;
+				const bool weaponDrawn = player->GetWeaponMagicDrawn();
+				if (!hasDrawState) {
+					wasWeaponDrawn = weaponDrawn;
+					hasDrawState = true;
+				} else if (weaponDrawn != wasWeaponDrawn) {
+					wasWeaponDrawn = weaponDrawn;
+					s_recentSprintSnapshot = IsPlayerTryingToSprint();
+					if (auto task = F4SE::GetTaskInterface())
+						task->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); });
+				}
+			}
+
+			if (!s_isRunGated && g_tripFrames.load() <= 0) return;
 			if (auto pc = RE::PlayerControls::GetSingleton()) {
 				if (s_isRunGated) {
 					float mag = std::sqrt(pc->data.moveInputVec.x * pc->data.moveInputVec.x + pc->data.moveInputVec.y * pc->data.moveInputVec.y);
@@ -711,11 +654,9 @@ namespace WRF::Mechanics
 				REX::INFO("[WRF] PlayerInputHandler registered without replacing PlayerControls vtable");
 			}
 		}
-		// Do not replace PlayerCharacter's animation-event vtable entry here.
-		// OAR and MSF also consume this shared entry; replacing it breaks their
-		// event chain. Attack lockout remains disabled at this legacy hook seam,
-		// while input and equip-event handling stay registered normally.
-		REX::INFO("[WRF] Animation vtable hook disabled for MSF/OAR compatibility");
+		// The animation event vtable is shared with OAR/MSF, so WRF keeps its
+		// attack cooldown and draw-state refresh on the input/per-frame paths.
+		REX::INFO("[WRF] Animation vtable hook skipped for MSF/OAR compatibility");
 
 		auto eqMgr = RE::ActorEquipManager::GetSingleton();
 		if (eqMgr) eqMgr->RegisterSink(&g_events);

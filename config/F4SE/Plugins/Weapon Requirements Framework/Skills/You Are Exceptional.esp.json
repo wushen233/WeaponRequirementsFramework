@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 2,
+  "module": "weaponSkills",
+  "RequiredPlugin": "You Are Exceptional.esp",
+  "ProviderPriority": 100,
+  "Rules": [
+    {"RuleName": "YEA Handguns", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x00000A", "ScaleFactor": 100.0}, "RequiredValue": 25, "Icon": "[Pistol]", "AppliesTo": {"categories": ["Weapon.Handling.Pistol"]}},
+    {"RuleName": "YEA Longarms", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x00000C", "ScaleFactor": 100.0}, "RequiredValue": 25, "Icon": "[Rifle]", "AppliesTo": {"categories": ["Weapon.Handling.Rifle", "Weapon.Configuration.Shotgun"]}},
+    {"RuleName": "YEA Sniping", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x00000C", "ScaleFactor": 100.0}, "RequiredValue": 50, "Priority": 10, "Icon": "[Sniper]", "AppliesTo": {"categories": ["Weapon.Configuration.Sniper"]}},
+    {"RuleName": "YEA Artillery", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x000002", "ScaleFactor": 100.0}, "RequiredValue": 25, "Icon": "[Minigun]", "AppliesTo": {"categories": ["Weapon.Handling.Heavy"]}},
+    {"RuleName": "YEA Demolitions", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x000005", "ScaleFactor": 100.0}, "RequiredValue": 25, "Icon": "[Grenade]", "AppliesTo": {"categories": ["Weapon.Family.Launcher"]}},
+    {"RuleName": "YEA Science", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x000011", "ScaleFactor": 100.0}, "RequiredValue": 25, "Icon": "[Energy]", "AppliesTo": {"categories": ["Weapon.Family.Energy", "Weapon.Family.Electromagnetic", "Weapon.Family.Gamma", "Weapon.Family.Alien"]}},
+    {"RuleName": "YEA Weaponry", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x000015", "ScaleFactor": 100.0}, "RequiredValue": 25, "Icon": "[Melee]", "AppliesTo": {"categories": ["Weapon.Family.Melee", "Weapon.Handling.Melee1H", "Weapon.Handling.Melee2H"]}},
+    {"RuleName": "YEA Unarmed", "RequiredSkill": {"Type": "AV", "Plugin": "You Are Exceptional.esp", "FormID": "0x000014", "ScaleFactor": 100.0}, "RequiredValue": 25, "Icon": "[Unarmed]", "AppliesTo": {"categories": ["Weapon.Family.Unarmed", "Weapon.Handling.Unarmed"]}}
+  ]
+}

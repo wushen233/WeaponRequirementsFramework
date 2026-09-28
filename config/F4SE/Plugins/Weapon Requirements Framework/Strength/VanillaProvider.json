@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 2,
+  "module": "weaponStrength",
+  "RequiredPlugin": "Fallout4.esm",
+  "ProviderPriority": 0,
+  "Rules": [
+    {"RuleName": "Heavy Weapons", "Value": 7, "Priority": 50, "AppliesTo": {"categories": ["Weapon.Handling.Heavy"]}},
+    {"RuleName": "Sniper Configuration", "Value": 6, "Priority": 45, "AppliesTo": {"categories": ["Weapon.Configuration.Sniper"]}},
+    {"RuleName": "Shotguns", "Value": 5, "Priority": 40, "AppliesTo": {"categories": ["Weapon.Configuration.Shotgun"]}},
+    {"RuleName": "Rifles", "Value": 4, "Priority": 35, "AppliesTo": {"categories": ["Weapon.Handling.Rifle"]}},
+    {"RuleName": "Pistols", "Value": 3, "Priority": 30, "AppliesTo": {"categories": ["Weapon.Handling.Pistol"]}},
+    {"RuleName": "Two-Handed Melee", "Value": 6, "Priority": 40, "AppliesTo": {"categories": ["Weapon.Handling.Melee2H"]}},
+    {"RuleName": "One-Handed Melee", "Value": 2, "Priority": 30, "AppliesTo": {"categories": ["Weapon.Handling.Melee1H", "Weapon.Handling.Unarmed"]}},
+    {"RuleName": "Automatic Receiver", "Value": 1, "Options": {"IsModifier": true}, "AppliesTo": {"categories": ["Weapon.Modifier.Automatic"]}},
+    {"RuleName": "Scope", "Value": 1, "Options": {"IsModifier": true}, "AppliesTo": {"categories": ["Weapon.Modifier.Scope"]}},
+    {"RuleName": "Long or Heavy Barrel", "Value": 0.5, "Options": {"IsModifier": true}, "AppliesTo": {"categories": ["Weapon.Modifier.LongBarrel"]}},
+    {"RuleName": "Suppressor", "Value": 0.5, "Options": {"IsModifier": true}, "AppliesTo": {"categories": ["Weapon.Modifier.Suppressor"]}},
+    {"RuleName": "Pipe Weapon", "Value": -1, "Options": {"IsModifier": true}, "AppliesTo": {"categories": ["Weapon.Modifier.Pipe"]}},
+    {"RuleName": "Two-Shot", "Value": 2, "Options": {"IsModifier": true}, "AppliesTo": {"categories": ["Weapon.Modifier.TwoShot"]}},
+    {"RuleName": "FNV Heavy Unique Weapons", "Value": 8, "Priority": 100, "AppliesTo": {"formIDs": ["Fallout4.esm|000BD56F", "Fallout4.esm|0001F669", "Fallout4.esm|000E27BC", "Fallout4.esm|000D1EB0", "Fallout4.esm|000FD11B"]}},
+    {"RuleName": "FNV Medium Unique Weapons", "Value": 7, "Priority": 99, "AppliesTo": {"formIDs": ["Fallout4.esm|000FF964", "Fallout4.esm|000E5881"]}},
+    {"RuleName": "FNV Standard Unique Weapons", "Value": 6, "Priority": 98, "AppliesTo": {"formIDs": ["Fallout4.esm|000E41EB", "Fallout4.esm|000FE268", "Fallout4.esm|000E942B"]}},
+    {"RuleName": "FNV Light Unique Weapons", "Value": 5, "Priority": 97, "AppliesTo": {"formIDs": ["Fallout4.esm|0003F6F8", "Fallout4.esm|0004F46A", "Fallout4.esm|0000463F", "Fallout4.esm|0014831C", "Fallout4.esm|00092217", "Fallout4.esm|0008E736", "Fallout4.esm|000CE97D"]}}
+  ]
+}

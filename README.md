@@ -55,15 +55,27 @@ To use an explicit CommonLibF4 checkout:
 .\scripts\build.ps1 -CommonLibF4Path D:\path\to\commonlibf4
 ```
 
-The resulting DLL is placed under `build/windows/x64/releasedbg/` by XMake.
-Compile `papyrus/WRF_Native.psc` with the Fallout 4 Papyrus compiler when
-building a complete mod package.
+When this script runs inside the FO4 workspace, build output is rooted at
+`build/WeaponRequirementsFramework/`; a standalone checkout uses XMake's
+default `build/` directory. Compile `papyrus/WRF_Native.psc` with the Fallout 4
+Papyrus compiler when building a complete mod package.
 
 ## Configuration
 
 The repository keeps editable runtime configuration under `config` using the
-same directory structure expected below Fallout 4's `Data` directory. Copy
-only the files needed by your development install or package pipeline.
+same directory structure expected below Fallout 4's `Data` directory. The
+default providers are in `config/F4SE/Plugins/Weapon Requirements Framework/`,
+under `Classifications`, `Skills`, and `Strength`. Copy this tree into the
+game's `Data` directory or your package staging directory.
+
+Classification categories in `WRF_Default.json` can coexist across weapon
+families and modifiers. `Weapon.Handling` categories are exclusive, as are
+`Weapon.Configuration` categories. The melee recovery penalty starts at attack
+input because WRF does not replace the shared animation-event handler used by
+OAR and MSF. Skill providers may name a `RequiredPlugin`; those files are
+skipped when that plugin is not loaded. The repository includes the vanilla
+skill provider and optional integrations for Classic Skill System, S7 System,
+and You Are Exceptional.
 
 The released ESP is required by the MCM and some default rules. It is supplied
 through the Nexus package because compiled game plugins are outside this source

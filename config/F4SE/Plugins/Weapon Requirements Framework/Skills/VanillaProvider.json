@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 2,
+  "module": "weaponSkills",
+  "RequiredPlugin": "Fallout4.esm",
+  "ProviderPriority": 0,
+  "Rules": [
+    {"RuleName": "Pistols", "RequiredSkill": {"Type": "Perk", "Plugin": "Fallout4.esm", "FormID": "0004A09F"}, "RequiredValue": 1, "Icon": "[Pistol]", "AppliesTo": {"categories": ["Weapon.Handling.Pistol"]}},
+    {"RuleName": "Rifles", "RequiredSkill": {"Type": "Perk", "Plugin": "Fallout4.esm", "FormID": "0004A0B6"}, "RequiredValue": 1, "Icon": "[Rifle]", "AppliesTo": {"categories": ["Weapon.Handling.Rifle", "Weapon.Configuration.Sniper"]}},
+    {"RuleName": "Heavy Weapons", "RequiredSkill": {"Type": "Perk", "Plugin": "Fallout4.esm", "FormID": "0004A0D6"}, "RequiredValue": 1, "Icon": "[Minigun]", "AppliesTo": {"categories": ["Weapon.Handling.Heavy"]}},
+    {"RuleName": "Melee", "RequiredSkill": {"Type": "Perk", "Plugin": "Fallout4.esm", "FormID": "0004A0B5"}, "RequiredValue": 1, "Icon": "[Melee]", "AppliesTo": {"categories": ["Weapon.Family.Melee", "Weapon.Handling.Melee1H", "Weapon.Handling.Melee2H"]}},
+    {"RuleName": "Unarmed", "RequiredSkill": {"Type": "Perk", "Plugin": "Fallout4.esm", "FormID": "0001DAFE"}, "RequiredValue": 1, "Icon": "[Unarmed]", "AppliesTo": {"categories": ["Weapon.Family.Unarmed", "Weapon.Handling.Unarmed"]}},
+    {"RuleName": "Explosives", "RequiredSkill": {"Type": "Perk", "Plugin": "Fallout4.esm", "FormID": "0004A0DB"}, "RequiredValue": 1, "Icon": "[Grenade]", "AppliesTo": {"categories": ["Weapon.Family.Launcher"]}}
+  ]
+}

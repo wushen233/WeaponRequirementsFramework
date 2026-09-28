@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "Config.h"
+#include "FormResolver.h"
 #include <ConfigReader.h>
 #include <fstream>
 #include <limits>
@@ -9,51 +10,6 @@ namespace WRF
 	Config* Config::GetSingleton() {
 		static Config singleton;
 		return &singleton;
-	}
-
-	std::string Trim(const std::string& str) {
-		std::string s = str;
-		s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch) && ch != 0xEF && ch != 0xBB && ch != 0xBF; }));
-		s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
-		return s;
-	}
-
-	template <class T>
-	T* ResolveIdentifier(const std::string& a_identifier) {
-		auto dataHandler = RE::TESDataHandler::GetSingleton();
-		if (!dataHandler || a_identifier.empty()) return nullptr;
-		if (size_t splitPos = a_identifier.find('|'); splitPos != std::string::npos) {
-			std::string modName = Trim(a_identifier.substr(0, splitPos));
-			try {
-				const auto rawID = static_cast<RE::TESFormID>(std::stoul(Trim(a_identifier.substr(splitPos + 1)), nullptr, 16));
-				const auto mod = dataHandler->LookupModByName(modName);
-				if (!mod) return nullptr;
-
-				// Accept both the plugin-local record ID and the full load-order FormID.
-				// ESL records are displayed as FElllrrr (for example FE02716A), while
-				// LookupForm expects only rrr when the plugin name is supplied.
-				if (mod->IsLight()) {
-					const bool isFullLightID = (rawID >> 24) == 0xFE &&
-						((rawID >> 12) & 0x0FFF) == mod->GetSmallFileCompileIndex();
-					if (isFullLightID) {
-						if (auto form = RE::TESForm::GetFormByID(rawID)) return form->As<T>();
-					}
-					const auto localID = rawID & 0x0FFF;
-					if (auto form = dataHandler->LookupForm(static_cast<RE::TESFormID>(localID), modName)) return form->As<T>();
-				} else {
-					const bool isFullRegularID = (rawID >> 24) == mod->GetCompileIndex();
-					if (isFullRegularID) {
-						if (auto form = RE::TESForm::GetFormByID(rawID)) return form->As<T>();
-					} else if (auto form = dataHandler->LookupForm(rawID, modName)) {
-						return form->As<T>();
-					}
-				}
-				return nullptr;
-			}
-			catch (...) { return nullptr; }
-		}
-		auto form = RE::TESForm::GetFormByEditorID(RE::BSFixedString(a_identifier));
-		return form ? form->As<T>() : nullptr;
 	}
 
 	void Config::LoadAllSettings() {

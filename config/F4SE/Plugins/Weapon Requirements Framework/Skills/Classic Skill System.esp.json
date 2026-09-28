@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 2,
+  "module": "weaponSkills",
+  "RequiredPlugin": "Classic Skill System.esp",
+  "ProviderPriority": 200,
+  "Rules": [
+    {
+      "RuleName": "NVSS Explosives",
+      "Priority": 40,
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9B",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Grenade]",
+      "AppliesTo": {
+        "categories": ["Weapon.Family.Launcher"]
+      }
+    },
+    {
+      "RuleName": "NVSS Energy Weapons",
+      "Priority": 30,
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9A",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Energy]",
+      "AppliesTo": {
+        "categories": [
+          "Weapon.Family.Energy",
+          "Weapon.Family.Electromagnetic",
+          "Weapon.Family.Gamma",
+          "Weapon.Family.Alien"
+        ]
+      }
+    },
+    {
+      "RuleName": "NVSS Shotguns",
+      "Priority": 20,
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9C",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Shotgun]",
+      "AppliesTo": {
+        "categories": ["Weapon.Configuration.Shotgun"]
+      }
+    },
+    {
+      "RuleName": "NVSS Sniper Rifles",
+      "Priority": 20,
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9C",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Sniper]",
+      "AppliesTo": {
+        "categories": ["Weapon.Configuration.Sniper"]
+      }
+    },
+    {
+      "RuleName": "NVSS Heavy Guns",
+      "Priority": 10,
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9C",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Minigun]",
+      "AppliesTo": {
+        "categories": ["Weapon.Handling.Heavy"]
+      }
+    },
+    {
+      "RuleName": "NVSS Automatic Guns",
+      "Priority": 5,
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9C",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Automatic]",
+      "AppliesTo": {
+        "categories": ["Weapon.Modifier.Automatic"]
+      }
+    },
+    {
+      "RuleName": "NVSS Pistols",
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9C",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Pistol]",
+      "AppliesTo": {
+        "categories": ["Weapon.Handling.Pistol"]
+      }
+    },
+    {
+      "RuleName": "NVSS Rifles",
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9C",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Rifle]",
+      "AppliesTo": {
+        "categories": ["Weapon.Handling.Rifle"]
+      }
+    },
+    {
+      "RuleName": "NVSS Melee Weapons",
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xF9F",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Melee]",
+      "AppliesTo": {
+        "categories": [
+          "Weapon.Family.Melee",
+          "Weapon.Handling.Melee1H",
+          "Weapon.Handling.Melee2H"
+        ]
+      }
+    },
+    {
+      "RuleName": "NVSS Unarmed",
+      "RequiredSkill": {
+        "Type": "AV",
+        "Plugin": "Classic Skill System.esp",
+        "FormID": "0xFA5",
+        "ScaleFactor": 1.0
+      },
+      "RequiredValue": 25,
+      "Icon": "[Unarmed]",
+      "AppliesTo": {
+        "categories": [
+          "Weapon.Family.Unarmed",
+          "Weapon.Handling.Unarmed"
+        ]
+      }
+    }
+  ]
+}

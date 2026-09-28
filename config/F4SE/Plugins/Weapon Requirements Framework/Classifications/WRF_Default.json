@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "module": "weaponClassifications",
+  "provider": "Weapon Requirements Framework Default Weapon Classification",
+  "categories": {
+    "Weapon.Family.Ballistic": {
+      "keywords": ["WeaponTypePistol", "WeaponTypeRifle", "WeaponTypeAutomatic", "WeaponTypeShotgun", "WeaponTypeHeavyGun"],
+      "instanceKeywords": ["WeaponTypePistol", "WeaponTypeRifle", "WeaponTypeAutomatic", "WeaponTypeShotgun", "WeaponTypeHeavyGun"]
+    },
+    "Weapon.Family.Energy": {
+      "keywords": ["WeaponTypeLaser", "WeaponTypePlasma", "WeaponTypeFlamer", "WeaponTypeCryolator", "WeaponTypeGatlingLaser"],
+      "instanceKeywords": ["WeaponTypeLaser", "WeaponTypePlasma", "WeaponTypeFlamer", "WeaponTypeCryolator", "WeaponTypeGatlingLaser"]
+    },
+    "Weapon.Family.Launcher": {
+      "keywords": ["WeaponTypeMissileLauncher", "WeaponTypeFatMan", "WeaponTypeBroadsider", "WeaponTypeJunkJet", "WeaponTypeExplosive", "WeaponTypeThrown"],
+      "instanceKeywords": ["WeaponTypeMissileLauncher", "WeaponTypeFatMan", "WeaponTypeBroadsider", "WeaponTypeJunkJet", "WeaponTypeExplosive", "WeaponTypeThrown"]
+    },
+    "Weapon.Family.Melee": {
+      "keywords": ["WeaponTypeMelee1H", "WeaponTypeMelee2H"],
+      "instanceKeywords": ["WeaponTypeMelee1H", "WeaponTypeMelee2H"]
+    },
+    "Weapon.Family.Unarmed": {
+      "keywords": ["WeaponTypeUnarmed", "WeaponTypeHandToHand"],
+      "instanceKeywords": ["WeaponTypeUnarmed", "WeaponTypeHandToHand"]
+    },
+    "Weapon.Family.Electromagnetic": {"keywords": ["WeaponTypeGauss"], "instanceKeywords": ["WeaponTypeGauss"]},
+    "Weapon.Family.Gamma": {"keywords": ["WeaponTypeGamma"], "instanceKeywords": ["WeaponTypeGamma"]},
+    "Weapon.Family.Alien": {"keywords": ["WeaponTypeAlienBlaster"], "instanceKeywords": ["WeaponTypeAlienBlaster"]},
+    "Weapon.Handling.Pistol": {"keywords": ["WeaponTypePistol"], "instanceKeywords": ["WeaponTypePistol"]},
+    "Weapon.Handling.Rifle": {"keywords": ["WeaponTypeRifle", "WeaponTypeAutomatic", "WeaponTypeShotgun"], "instanceKeywords": ["WeaponTypeRifle", "WeaponTypeAutomatic", "WeaponTypeShotgun"]},
+    "Weapon.Handling.Heavy": {"keywords": ["WeaponTypeHeavyGun", "WeaponTypeMinigun", "WeaponTypeMissileLauncher", "WeaponTypeFatMan", "WeaponTypeFlamer", "WeaponTypeJunkJet", "WeaponTypeCryolator", "WeaponTypeGatlingLaser", "WeaponTypeBroadsider"], "instanceKeywords": ["WeaponTypeHeavyGun", "WeaponTypeMinigun", "WeaponTypeMissileLauncher", "WeaponTypeFatMan", "WeaponTypeFlamer", "WeaponTypeJunkJet", "WeaponTypeCryolator", "WeaponTypeGatlingLaser", "WeaponTypeBroadsider"]},
+    "Weapon.Handling.Melee1H": {"keywords": ["WeaponTypeMelee1H"], "instanceKeywords": ["WeaponTypeMelee1H"]},
+    "Weapon.Handling.Melee2H": {"keywords": ["WeaponTypeMelee2H"], "instanceKeywords": ["WeaponTypeMelee2H"]},
+    "Weapon.Handling.Unarmed": {"keywords": ["WeaponTypeUnarmed", "WeaponTypeHandToHand"], "instanceKeywords": ["WeaponTypeUnarmed", "WeaponTypeHandToHand"]},
+    "Weapon.Configuration.Shotgun": {"keywords": ["WeaponTypeShotgun"], "instanceKeywords": ["WeaponTypeShotgun"]},
+    "Weapon.Configuration.Sniper": {"keywords": ["WeaponTypeSniper"], "instanceKeywords": ["WeaponTypeSniper"]},
+    "Weapon.Modifier.Automatic": {"instanceKeywords": ["dn_HasReceiver_Automatic"]},
+    "Weapon.Modifier.Scope": {"instanceKeywords": ["HasScope", "dn_HasScope_Sniper"]},
+    "Weapon.Modifier.LongBarrel": {"instanceKeywords": ["dn_HasBarrel_Long", "dn_HasBarrel_Heavy"]},
+    "Weapon.Modifier.Suppressor": {"instanceKeywords": ["HasSilencer", "dn_HasMuzzle_Suppressor"]},
+    "Weapon.Modifier.Pipe": {"instanceKeywords": ["dn_weap_Pipe"]},
+    "Weapon.Modifier.TwoShot": {"instanceKeywords": ["HasLegendary_Weapon_TwoShot"]}
+  }
+}

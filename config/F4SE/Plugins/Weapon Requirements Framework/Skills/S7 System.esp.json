@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 2,
+  "module": "weaponSkills",
+  "RequiredPlugin": "S7 System.esp",
+  "ProviderPriority": 100,
+  "Rules": [
+    {
+      "RuleName": "S7 Pistols",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x16A", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Pistol]",
+      "AppliesTo": { "categories": ["Weapon.Handling.Pistol"] }
+    },
+    {
+      "RuleName": "S7 Rifles",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x170", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Rifle]",
+      "AppliesTo": { "categories": ["Weapon.Handling.Rifle"] }
+    },
+    {
+      "RuleName": "S7 Shotguns",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x186", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Shotgun]",
+      "AppliesTo": { "categories": ["Weapon.Configuration.Shotgun"] }
+    },
+    {
+      "RuleName": "S7 Sniping",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x17D", "ScaleFactor": 100.0 },
+      "RequiredValue": 50,
+      "Priority": 10,
+      "Icon": "[Sniper]",
+      "AppliesTo": { "categories": ["Weapon.Configuration.Sniper"] }
+    },
+    {
+      "RuleName": "S7 Automatics",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x195", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Automatic]",
+      "AppliesTo": { "categories": ["Weapon.Modifier.Automatic"] }
+    },
+    {
+      "RuleName": "S7 Heavy Weaponry",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x181", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Minigun]",
+      "AppliesTo": { "categories": ["Weapon.Handling.Heavy"] }
+    },
+    {
+      "RuleName": "S7 Energy Weapons",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x16E", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Energy]",
+      "AppliesTo": { "categories": ["Weapon.Family.Energy", "Weapon.Family.Electromagnetic", "Weapon.Family.Gamma", "Weapon.Family.Alien"] }
+    },
+    {
+      "RuleName": "S7 Explosives",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x166", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Grenade]",
+      "AppliesTo": { "categories": ["Weapon.Family.Launcher"] }
+    },
+    {
+      "RuleName": "S7 Melee",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x17F", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Melee]",
+      "AppliesTo": { "categories": ["Weapon.Family.Melee", "Weapon.Handling.Melee1H", "Weapon.Handling.Melee2H"] }
+    },
+    {
+      "RuleName": "S7 Unarmed",
+      "RequiredSkill": { "Type": "AV", "Plugin": "S7 System.esp", "FormID": "0x185", "ScaleFactor": 100.0 },
+      "RequiredValue": 25,
+      "Icon": "[Unarmed]",
+      "AppliesTo": { "categories": ["Weapon.Family.Unarmed", "Weapon.Handling.Unarmed"] }
+    }
+  ]
+}
