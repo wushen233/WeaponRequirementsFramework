@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Mechanics.h"
 #include "Config.h"
+#include "ClassificationManager.h"
 #include <unordered_set>
 #include <atomic>
 #include <chrono>
@@ -84,6 +85,12 @@ namespace WRF::Mechanics
 
 	int GetWeaponCategory(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
 		if (!a_weapon) return 0;
+		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Unarmed")) return 1;
+		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Melee1H") ||
+			Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Melee2H")) return 2;
+		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Pistol") ||
+			Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Rifle") ||
+			Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Heavy")) return 3;
 		auto weapData = a_instance ? static_cast<RE::TESObjectWEAP::InstanceData*>(a_instance) : &a_weapon->weaponData;
 		auto wType = static_cast<std::uint32_t>(weapData->type.get());
 		if (wType == 10 || wType == 11) return 4; // Grenade/Mine
@@ -107,6 +114,7 @@ namespace WRF::Mechanics
 
 	bool IsHeavyWeapon(RE::TESObjectWEAP* a_weapon, RE::TBO_InstanceData* a_instance) {
 		auto cfg = Config::GetSingleton();
+		if (Classification::HasCategory(a_weapon, a_instance, "Weapon.Handling.Heavy")) return true;
 		return a_weapon && (HasKeyword(a_weapon, a_instance, cfg->WeaponTypeHeavyGun) || HasKeyword(a_weapon, a_instance, cfg->WeaponTypeMinigun) ||
 			HasKeyword(a_weapon, a_instance, cfg->WeaponTypeGatlingLaser) || HasKeyword(a_weapon, a_instance, cfg->WeaponTypeFatMan) ||
 			HasKeyword(a_weapon, a_instance, cfg->WeaponTypeMissileLauncher) || HasKeyword(a_weapon, a_instance, cfg->WeaponTypeFlamer) ||
@@ -162,27 +170,17 @@ namespace WRF::Mechanics
 		bool debug = cfg->bDebugMode;
 
 		if (debug) {
-			REX::INFO("[WRF DEBUG] GetSkillRequirement: weapon={} ({:08X}), mode={}, mappings={}",
+			REX::INFO("[WRF DEBUG] GetSkillRequirement: weapon={} ({:08X}), mappings={}",
 				GetFormName(a_weapon), a_weapon->formID,
-				(cfg->iSkillCalcMode == Config::SkillCalcMode::kActorValueBased) ? "AV" : "Perk",
 				cfg->CustomSkillMappings.size());
 		}
 
 		for (const auto& mapping : cfg->CustomSkillMappings) {
-			bool isMatch = std::find(mapping.weapons.begin(), mapping.weapons.end(), a_weapon) != mapping.weapons.end();
-			if (!isMatch && !mapping.keywords.empty()) {
-				if (mapping.keywordMatchAnd) {
-					isMatch = true;
-					for (auto kwd : mapping.keywords) if (!HasKeyword(a_weapon, a_instance, kwd)) { isMatch = false; break; }
-				}
-				else {
-					for (auto kwd : mapping.keywords) if (HasKeyword(a_weapon, a_instance, kwd)) { isMatch = true; break; }
-				}
-			}
+			bool isMatch = Classification::HasAnyCategory(a_weapon, a_instance, mapping.categories);
 			if (isMatch) {
 				if (!mapping.skillAVs.empty()) {
 					float maxSkill = 0.0f; RE::ActorValueInfo* bestAV = mapping.skillAVs[0];
-					for (auto av : mapping.skillAVs) { float val = a_actor->GetActorValue(*av); if (val > maxSkill) { maxSkill = val; bestAV = av; } }
+					for (auto av : mapping.skillAVs) { float val = a_actor->GetActorValue(*av) * mapping.scaleFactor; if (val > maxSkill) { maxSkill = val; bestAV = av; } }
 						return { true, false, GetCleanName(bestAV), static_cast<int>(mapping.reqValue), mapping.reqValue - maxSkill, mapping.icon, 100 };
 				}
 				else if (!mapping.perks.empty()) {
@@ -193,17 +191,7 @@ namespace WRF::Mechanics
 				}
 		}
 	}
-	// Perk 模式下：无规则匹配则跳过武器原生 skill 托底，返回无需求
-	if (cfg->iSkillCalcMode == Config::SkillCalcMode::kPerkBased) {
-		if (debug) REX::INFO("[WRF DEBUG] GetSkillRequirement: no match (Perk mode, silent)");
-		return { false, false, "", 0, 0.0f, GetFallbackIcon(a_weapon), 0 };
-	}
-	auto wData = a_instance ? static_cast<RE::TESObjectWEAP::InstanceData*>(a_instance) : &a_weapon->weaponData;
-	if (wData && wData->skill) {
-		if (debug) REX::INFO("[WRF DEBUG] GetSkillRequirement: using native skill {}", GetFormName(wData->skill));
-		return { true, false, GetCleanName(wData->skill), 50, 50.0f - a_actor->GetActorValue(*wData->skill), GetFallbackIcon(a_weapon), 100 };
-	}
-	if (debug) REX::INFO("[WRF DEBUG] GetSkillRequirement: no match, no native skill -> no requirement");
+	if (debug) REX::INFO("[WRF DEBUG] GetSkillRequirement: no category provider match");
 	return { false, false, "", 0, 0.0f, GetFallbackIcon(a_weapon), 0 };
 }
 
@@ -236,74 +224,23 @@ namespace WRF::Mechanics
 			const char* wName = GetFormName(a_weapon);
 			REX::INFO("[WRF DEBUG] ===== CalculateRequirement 开始 =====");
 			REX::INFO("[WRF DEBUG] 武器: {} ({:08X})", wName, a_weapon->formID);
-			REX::INFO("[WRF DEBUG] 当前模式: {}", (cfg->iStrengthCalcMode == Config::StrengthCalcMode::kWeightBased) ? "重量范围(WeightBased)" : "武器/关键词(JsonRules)");
+			REX::INFO("[WRF DEBUG] 分类 Provider 规则数: {}", cfg->CustomStrengthMappings.size());
 		}
 
-		float req;
-		if (cfg->iStrengthCalcMode == Config::StrengthCalcMode::kWeightBased) {
-			// 模式 B：基于重量范围的 JSON 规则
-			float weight = GetWeaponWeight(a_weapon, a_instance);
-			float roundedWeight = std::round(weight);
-			if (debug) REX::INFO("[WRF DEBUG] [重量模式] 武器重量: {:.2f} -> 取整: {:.0f}", weight, roundedWeight);
-
-			req = 0.0f;
-			bool matched = false;
-			for (const auto& rule : cfg->CustomStrengthMappings) {
-				// 跳过有武器/关键词条件的规则（只在关键词模式下使用）
-				if (rule.minWeight >= 0.0f && rule.weapons.empty() && rule.keywords.empty()) {
-					bool match = roundedWeight >= rule.minWeight;
-					if (match && rule.maxWeight >= 0.0f) {
-						match = roundedWeight <= rule.maxWeight;
-					}
-					if (debug) {
-						REX::INFO("[WRF DEBUG] [重量模式] 检查规则: minW={:.1f}, maxW={:.1f}, value={:.1f} -> {}",
-							rule.minWeight, rule.maxWeight, rule.value, match ? "[MATCH]" : "[SKIP]");
-					}
-					if (match) {
-						req = rule.value;
-						matched = true;
-						break;
-					}
-				}
+		float baseReq = -1.0f, addMod = 0.0f, multMod = 1.0f;
+		for (const auto& rule : cfg->CustomStrengthMappings) {
+			bool isMatch = !rule.categories.empty() && Classification::HasAnyCategory(a_weapon, a_instance, rule.categories);
+			if (!isMatch) isMatch = std::find(rule.weapons.begin(), rule.weapons.end(), a_weapon) != rule.weapons.end();
+			if (!isMatch) continue;
+			if (rule.isModifier) {
+				if (rule.isMultiplier) multMod *= rule.value;
+				else addMod += rule.value;
+			} else if (baseReq < 0.0f) {
+				baseReq = rule.value;
 			}
-			if (debug) REX::INFO("[WRF DEBUG] [重量模式] 匹配结果: {} (req={:.1f})", matched ? "[MATCH]" : "[NO MATCH, DEFAULT 0]", req);
 		}
-		else {
-			// 模式 A：原有的 JSON 规则驱动（按武器/关键词匹配）
-			float baseReq = -1.0f, addMod = 0.0f, multMod = 1.0f;
-			if (debug) REX::INFO("[WRF DEBUG] [关键词模式] 开始匹配规则，共 {} 条规则", cfg->CustomStrengthMappings.size());
-
-			for (const auto& rule : cfg->CustomStrengthMappings) {
-				// 跳过仅有重量范围的规则
-				if (rule.minWeight >= 0.0f && rule.weapons.empty() && rule.keywords.empty()) {
-					if (debug) REX::INFO("[WRF DEBUG] [关键词模式] 规则跳过(仅重量范围规则)");
-					continue;
-				}
-				bool isMatch = std::find(rule.weapons.begin(), rule.weapons.end(), a_weapon) != rule.weapons.end();
-				if (!isMatch && !rule.keywords.empty()) {
-					if (rule.keywordMatchAnd) {
-						isMatch = true;
-						for (auto kwd : rule.keywords) if (!HasKeyword(a_weapon, a_instance, kwd)) { isMatch = false; break; }
-					}
-					else {
-						for (auto kwd : rule.keywords) if (HasKeyword(a_weapon, a_instance, kwd)) { isMatch = true; break; }
-					}
-				}
-				if (debug) {
-					REX::INFO("[WRF DEBUG] [关键词模式] 规则: val={:.1f}, isMod={}, isMult={}, weapons={}, keywords={} -> {}",
-						rule.value, rule.isModifier, rule.isMultiplier, rule.weapons.size(), rule.keywords.size(),
-						isMatch ? "[MATCH]" : "[SKIP]");
-				}
-				if (isMatch) {
-					if (rule.isModifier) { if (rule.isMultiplier) multMod *= rule.value; else addMod += rule.value; }
-					else if (baseReq < 0.0f) { baseReq = rule.value; if (debug) REX::INFO("[WRF DEBUG] [关键词模式]   -> 设置 baseReq = {:.1f}", baseReq); }
-				}
-			}
-
-			if (baseReq < 0.0f) baseReq = 0.0f;
-			req = (baseReq + addMod) * multMod;
-			if (debug) REX::INFO("[WRF DEBUG] [关键词模式] 计算: ({:.1f} + {:.1f}) * {:.1f} = {:.1f}", baseReq, addMod, multMod, req);
-		}
+		if (baseReq < 0.0f) baseReq = 0.0f;
+		float req = (baseReq + addMod) * multMod;
 
 		if (cfg->bEnableAmmoReq && a_includeAmmo) {
 			RE::TESAmmo* ammo = a_instance ? static_cast<RE::TESObjectWEAP::InstanceData*>(a_instance)->ammo : a_weapon->weaponData.ammo;
@@ -563,19 +500,30 @@ namespace WRF::Mechanics
 	class CoreHooks {
 	public:
 		static void HookInput(RE::BSInputEventReceiver* a_this, const RE::InputEvent* a_head) {
-			auto cfg = Config::GetSingleton(); auto player = RE::PlayerCharacter::GetSingleton();
-			if (cfg->bModEnabled && player) {
-				static bool s_wasMov = false; bool curMov = IsPlayerMoving();
-				if (curMov && !s_wasMov) {
-					if (s_isCurrentlyGated && IsPlayerTryingToSprint()) TryShowSprintMsg();
-					if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); });
-				}
-				s_wasMov = curMov;
+			auto cfg = Config::GetSingleton();
+			if (cfg->bModEnabled && a_head) {
+				static bool s_wasMov = false;
+				RE::PlayerCharacter* player = nullptr;
+				bool movementChecked = false;
+				bool curMov = false;
 
 				for (auto e = a_head; e; e = e->next) {
 					if (e->eventType == RE::INPUT_EVENT_TYPE::kButton) {
 						auto bEvent = static_cast<const RE::ButtonEvent*>(e);
 						if (!bEvent->strUserEvent.empty()) {
+							if (!player) {
+								player = RE::PlayerCharacter::GetSingleton();
+								if (!player) break;
+							}
+							if (!movementChecked) {
+								curMov = IsPlayerMoving();
+								if (curMov && !s_wasMov) {
+									if (s_isCurrentlyGated && IsPlayerTryingToSprint()) TryShowSprintMsg();
+									if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); });
+								}
+								s_wasMov = curMov;
+								movementChecked = true;
+							}
 							std::string key = bEvent->strUserEvent.c_str();
 
 							// 核心逻辑：拦截攻击输入
@@ -613,7 +561,9 @@ namespace WRF::Mechanics
 				}
 			}
 			_PerformInputProcessing(a_this, a_head);
-			if (cfg->bModEnabled) {
+			// With no run gate or recovery stop active, the idle input path has
+			// nothing to clamp. Avoid touching PlayerControls every input tick.
+			if (cfg->bModEnabled && (s_isRunGated || g_tripFrames.load() > 0)) {
 				if (auto pc = RE::PlayerControls::GetSingleton()) {
 					if (s_isRunGated) {
 						float mag = std::sqrt(pc->data.moveInputVec.x * pc->data.moveInputVec.x + pc->data.moveInputVec.y * pc->data.moveInputVec.y);
@@ -632,10 +582,12 @@ namespace WRF::Mechanics
 				std::thread([]() { std::this_thread::sleep_for(std::chrono::milliseconds(50)); if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); }); }).detach();
 			}
 
-			auto player = RE::PlayerCharacter::GetSingleton();
-			auto cfg = Config::GetSingleton();
-
-			if (player && a_event.tag == "BeginMeleeAttack") {
+			if (a_event.tag == "BeginMeleeAttack") {
+				auto player = RE::PlayerCharacter::GetSingleton();
+				auto cfg = Config::GetSingleton();
+				if (!player) {
+					return _ProcessAnim(a_this, a_event, a_src);
+				}
 				float deficit = GetStrengthDeficit(player);
 
 				// 调试：打印当前的缺口值，确认逻辑是否被触发
@@ -678,25 +630,92 @@ namespace WRF::Mechanics
 		}
 	} static g_events;
 
+	// Use the engine's handler list instead of replacing the shared PlayerControls vtable.
+	// This allows MSF/OAR and other input consumers to coexist in the same process.
+	class WRFInputHandler final : public RE::PlayerInputHandler {
+	public:
+		explicit WRFInputHandler(RE::PlayerControlsData& a_data) : RE::PlayerInputHandler(a_data) {}
+
+		void OnButtonEvent(const RE::ButtonEvent* a_event) override {
+			auto cfg = Config::GetSingleton();
+			if (!cfg->bModEnabled || !a_event || a_event->strUserEvent.empty()) return;
+
+			auto player = RE::PlayerCharacter::GetSingleton();
+			if (!player) return;
+
+			static bool s_wasMoving = false;
+			const bool curMoving = IsPlayerMoving();
+			if (curMoving && !s_wasMoving) {
+				if (s_isCurrentlyGated && IsPlayerTryingToSprint()) TryShowSprintMsg();
+				if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); });
+			}
+			s_wasMoving = curMoving;
+
+			const std::string key = a_event->strUserEvent.c_str();
+			auto event = const_cast<RE::ButtonEvent*>(a_event);
+			if ((key == "PrimaryAttack" || key == "RightAttack") && event->value != 0 &&
+				std::chrono::steady_clock::now() < s_attackLockoutUntil.load()) {
+				event->value = 0.0f;
+				if (cfg->bDebugMode) REX::INFO("[WRF Debug] 攻击输入被拦截 (力量不足)");
+			}
+
+			const bool hold = event->value != 0;
+			bool first = false;
+			if (hold) {
+				if (!s_heldKeys.count(key)) { first = true; s_heldKeys.insert(key); }
+			} else {
+				s_heldKeys.erase(key);
+			}
+
+			const bool drawn = player->GetWeaponMagicDrawn();
+			if ((key == "PrimaryAttack" || key == "RightAttack") && drawn && cfg->bPASoftGateEnabled && IsPlayerInPowerArmor(player)) {
+				RE::TESObjectWEAP* w = nullptr; RE::TBO_InstanceData* i = nullptr;
+				if (GetEquippedMainWeapon(player, w, i) && GetPAWeaponState(w, i) == 1) {
+					if (cfg->iPenaltyMode == 0) {
+						if (first) RE::SendHUDMessage::ShowHUDMessage("$PowerArmorWeaponRestrictionsMSG", "WRF_WeaponJamSound", false, true);
+						event->value = 0.0f;
+					} else if (cfg->iPenaltyMode == 1) {
+						event->strUserEvent = cfg->strControl_Melee;
+					}
+				}
+			}
+
+			if (key == "Sprint" && first && s_isCurrentlyGated && curMoving) TryShowSprintMsg();
+			if (first && (key == "ReadyWeapon" || ((key == "PrimaryAttack" || key == "RightAttack") && !drawn))) {
+				std::thread([]() { std::this_thread::sleep_for(std::chrono::milliseconds(150)); if (auto t = F4SE::GetTaskInterface()) t->AddTask([]() { RefreshStatus(RE::PlayerCharacter::GetSingleton()); }); }).detach();
+			}
+		}
+
+		void PerFrameUpdate() override {
+			auto cfg = Config::GetSingleton();
+			if (!cfg->bModEnabled || (!s_isRunGated && g_tripFrames.load() <= 0)) return;
+			if (auto pc = RE::PlayerControls::GetSingleton()) {
+				if (s_isRunGated) {
+					float mag = std::sqrt(pc->data.moveInputVec.x * pc->data.moveInputVec.x + pc->data.moveInputVec.y * pc->data.moveInputVec.y);
+					if (mag > 0.4f) { pc->data.moveInputVec.x *= (0.4f / mag); pc->data.moveInputVec.y *= (0.4f / mag); }
+				} else if (g_tripFrames > 0) {
+					pc->data.moveInputVec.x = pc->data.moveInputVec.y = 0;
+					--g_tripFrames;
+				}
+			}
+		}
+	};
+
+	static std::unique_ptr<WRFInputHandler> g_inputHandler;
+
 	void InstallHooks() {
-		DWORD oldProtect;
-
 		if (auto pc = RE::PlayerControls::GetSingleton()) {
-			auto vtable = *(uintptr_t**)static_cast<RE::BSInputEventReceiver*>(pc);
-			CoreHooks::_PerformInputProcessing = reinterpret_cast<decltype(CoreHooks::_PerformInputProcessing)>(vtable[0]);
-
-			VirtualProtect(&vtable[0], sizeof(void*), PAGE_EXECUTE_READWRITE, &oldProtect);
-			vtable[0] = reinterpret_cast<uintptr_t>(CoreHooks::HookInput);
-			VirtualProtect(&vtable[0], sizeof(void*), oldProtect, &oldProtect);
+			if (!g_inputHandler) {
+				g_inputHandler = std::make_unique<WRFInputHandler>(pc->data);
+				pc->RegisterHandler(g_inputHandler.get());
+				REX::INFO("[WRF] PlayerInputHandler registered without replacing PlayerControls vtable");
+			}
 		}
-		if (auto p = RE::PlayerCharacter::GetSingleton()) {
-			auto vtable = *(uintptr_t**)static_cast<RE::BSTEventSink<RE::BSAnimationGraphEvent>*>(p);
-			CoreHooks::_ProcessAnim = reinterpret_cast<decltype(CoreHooks::_ProcessAnim)>(vtable[1]);
-
-			VirtualProtect(&vtable[1], sizeof(void*), PAGE_EXECUTE_READWRITE, &oldProtect);
-			vtable[1] = reinterpret_cast<uintptr_t>(CoreHooks::HookProcessAnim);
-			VirtualProtect(&vtable[1], sizeof(void*), oldProtect, &oldProtect);
-		}
+		// Do not replace PlayerCharacter's animation-event vtable entry here.
+		// OAR and MSF also consume this shared entry; replacing it breaks their
+		// event chain. Attack lockout remains disabled at this legacy hook seam,
+		// while input and equip-event handling stay registered normally.
+		REX::INFO("[WRF] Animation vtable hook disabled for MSF/OAR compatibility");
 
 		auto eqMgr = RE::ActorEquipManager::GetSingleton();
 		if (eqMgr) eqMgr->RegisterSink(&g_events);

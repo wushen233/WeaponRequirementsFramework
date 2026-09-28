@@ -2,6 +2,7 @@
 #include "Config.h"
 #include <ConfigReader.h>
 #include <fstream>
+#include <limits>
 
 namespace WRF
 {
@@ -24,9 +25,30 @@ namespace WRF
 		if (size_t splitPos = a_identifier.find('|'); splitPos != std::string::npos) {
 			std::string modName = Trim(a_identifier.substr(0, splitPos));
 			try {
-				std::uint32_t localID = std::stoul(Trim(a_identifier.substr(splitPos + 1)), nullptr, 16);
-				auto form = dataHandler->LookupForm(static_cast<RE::TESFormID>(localID), modName);
-				return form ? form->As<T>() : nullptr;
+				const auto rawID = static_cast<RE::TESFormID>(std::stoul(Trim(a_identifier.substr(splitPos + 1)), nullptr, 16));
+				const auto mod = dataHandler->LookupModByName(modName);
+				if (!mod) return nullptr;
+
+				// Accept both the plugin-local record ID and the full load-order FormID.
+				// ESL records are displayed as FElllrrr (for example FE02716A), while
+				// LookupForm expects only rrr when the plugin name is supplied.
+				if (mod->IsLight()) {
+					const bool isFullLightID = (rawID >> 24) == 0xFE &&
+						((rawID >> 12) & 0x0FFF) == mod->GetSmallFileCompileIndex();
+					if (isFullLightID) {
+						if (auto form = RE::TESForm::GetFormByID(rawID)) return form->As<T>();
+					}
+					const auto localID = rawID & 0x0FFF;
+					if (auto form = dataHandler->LookupForm(static_cast<RE::TESFormID>(localID), modName)) return form->As<T>();
+				} else {
+					const bool isFullRegularID = (rawID >> 24) == mod->GetCompileIndex();
+					if (isFullRegularID) {
+						if (auto form = RE::TESForm::GetFormByID(rawID)) return form->As<T>();
+					} else if (auto form = dataHandler->LookupForm(rawID, modName)) {
+						return form->As<T>();
+					}
+				}
+				return nullptr;
 			}
 			catch (...) { return nullptr; }
 		}
@@ -71,17 +93,9 @@ namespace WRF
 		bDebugMode = getBool("Main", "bDebugMode", false);
 		bShowUI = getBool("UI", "bShowUI", true);
 		iUIDamageDisplayMode = getInt("UI", "iUIDamageDisplayMode", 0);
-		// ----- 力量计算模式 -----
-		int modeVal = getInt("Main", "iStrengthCalcMode", 0);
-		iStrengthCalcMode = (modeVal == 1) ? StrengthCalcMode::kWeightBased : StrengthCalcMode::kJsonRules;
-
 		// ----- 弹药需求计算模式 -----
 		int ammoModeVal = getInt("Modifiers", "iAmmoCalcMode", 0);
 		iAmmoCalcMode = (ammoModeVal == 1) ? AmmoCalcMode::kWeightBased : AmmoCalcMode::kFixedConfig;
-
-		// ----- 技能检测模式 -----
-		int skillModeVal = getInt("Main", "iSkillCalcMode", 0);
-		iSkillCalcMode = (skillModeVal == 1) ? SkillCalcMode::kActorValueBased : SkillCalcMode::kPerkBased;
 
 		bGatedSprint = getBool("Movement", "bGatedSprint", true);
 		bGatedRun = getBool("Movement", "bGatedRun", false);
@@ -181,47 +195,40 @@ namespace WRF
 		ConfigReader::ForEachJsonInDirectory(
 			"Data\\F4SE\\Plugins\\Weapon Requirements Framework\\Skills",
 			[&](const nlohmann::json& j, const auto&) {
-				if (!j.value("Enabled", true) || !j.contains("Rules")) return;
-				int filePri = j.value("Priority", 0);
+				if (j.value("module", "") != "weaponSkills" || !j.contains("Rules")) return;
+				const auto requiredPlugin = j.value("RequiredPlugin", "");
+				if (!requiredPlugin.empty() && !RE::TESDataHandler::GetSingleton()->LookupModByName(requiredPlugin)) return;
+				const int filePri = j.value("ProviderPriority", 0);
 				for (const auto& item : j["Rules"]) {
 					SkillMapping mapping;
 					mapping.reqValue = item.value("ReqValue", 0.0f);
+					mapping.reqValue = item.value("RequiredValue", mapping.reqValue);
 					mapping.icon = item.value("Icon", "");
+					if (item.contains("AppliesTo") && item["AppliesTo"].is_object()) {
+						const auto& appliesTo = item["AppliesTo"];
+						if (appliesTo.contains("categories") && appliesTo["categories"].is_array())
+							for (const auto& category : appliesTo["categories"])
+								if (category.is_string()) mapping.categories.push_back(category.get<std::string>());
+					}
+					if (item.contains("RequiredSkill") && item["RequiredSkill"].is_object()) {
+						const auto& skill = item["RequiredSkill"];
+						const auto type = skill.value("Type", "AV");
+						mapping.scaleFactor = skill.value("ScaleFactor", 1.0f);
+						std::string identifier;
+						if (skill.contains("EditorID") && skill["EditorID"].is_string())
+							identifier = skill["EditorID"].get<std::string>();
+						else if (skill.contains("Plugin") && skill.contains("FormID"))
+							identifier = skill["Plugin"].get<std::string>() + "|" + skill["FormID"].get<std::string>();
+						if (type == "Perk" || type == "perk") {
+							if (auto perk = ResolveIdentifier<RE::BGSPerk>(identifier)) mapping.perks.push_back(perk);
+						} else if (auto av = ResolveIdentifier<RE::ActorValueInfo>(identifier)) {
+							mapping.skillAVs.push_back(av);
+						}
+					}
 					if (!mapping.icon.empty() && std::find(IconPool.begin(), IconPool.end(), mapping.icon) == IconPool.end()) IconPool.push_back(mapping.icon);
-					if (item.contains("Skills")) {
-						auto& skills = item["Skills"];
-						if (skills.contains("Perks")) for (auto& pkVal : skills["Perks"]) if (auto pkForm = ResolveIdentifier<RE::BGSPerk>(pkVal.get<std::string>())) mapping.perks.push_back(pkForm);
-
-						if (skills.contains("ActorValues")) {
-							for (auto& avVal : skills["ActorValues"]) {
-								if (auto avForm = ResolveIdentifier<RE::ActorValueInfo>(avVal.get<std::string>())) mapping.skillAVs.push_back(avForm);
-							}
-						}
-						else if (skills.contains("SkillAVs")) {
-							for (auto& skVal : skills["SkillAVs"]) {
-								if (auto skForm = ResolveIdentifier<RE::ActorValueInfo>(skVal.get<std::string>())) mapping.skillAVs.push_back(skForm);
-							}
-						}
-					}
-					bool hasWpn = false;
-					if (item.contains("Conditions")) {
-						auto& conds = item["Conditions"];
-						std::string mType = conds.value("MatchType", "OR");
-						std::transform(mType.begin(), mType.end(), mType.begin(), ::toupper);
-						mapping.keywordMatchAnd = (mType == "AND");
-						if (conds.contains("Weapons")) for (auto& wpVal : conds["Weapons"]) if (auto wpForm = ResolveIdentifier<RE::TESObjectWEAP>(wpVal.get<std::string>())) { mapping.weapons.push_back(wpForm); hasWpn = true; }
-						if (conds.contains("Keywords")) for (auto& kwVal : conds["Keywords"]) if (auto kwForm = ResolveIdentifier<RE::BGSKeyword>(kwVal.get<std::string>())) mapping.keywords.push_back(kwForm);
-					}
-					mapping.priority = hasWpn ? 9999 : (filePri + item.value("Priority", 0));
-
-					// 根据当前技能检测模式过滤：只保留匹配该模式的规则
-					bool hasValidSkills = false;
-					if (iSkillCalcMode == SkillCalcMode::kPerkBased) {
-						hasValidSkills = !mapping.perks.empty();
-					} else {
-						hasValidSkills = !mapping.skillAVs.empty();
-					}
-					if ((!mapping.weapons.empty() || !mapping.keywords.empty()) && hasValidSkills)
+					mapping.priority = filePri + item.value("Priority", 0);
+					const bool hasValidSkills = !mapping.perks.empty() || !mapping.skillAVs.empty();
+					if (!mapping.categories.empty() && hasValidSkills)
 						CustomSkillMappings.push_back(mapping);
 				}
 			},
@@ -236,8 +243,10 @@ namespace WRF
 		ConfigReader::ForEachJsonInDirectory(
 			"Data\\F4SE\\Plugins\\Weapon Requirements Framework\\Strength",
 			[&](const nlohmann::json& j, const auto&) {
-				if (!j.value("Enabled", true) || !j.contains("Rules")) return;
-				int filePri = j.value("Priority", 0);
+				if (j.value("module", "") != "weaponStrength" || !j.contains("Rules")) return;
+				const auto requiredPlugin = j.value("RequiredPlugin", "");
+				if (!requiredPlugin.empty() && !RE::TESDataHandler::GetSingleton()->LookupModByName(requiredPlugin)) return;
+				const int filePri = j.value("ProviderPriority", 0);
 				for (const auto& item : j["Rules"]) {
 					StrengthMapping mapping;
 					mapping.value = item.value("Value", 0.0f);
@@ -245,21 +254,16 @@ namespace WRF
 						mapping.isModifier = item["Options"].value("IsModifier", false);
 						mapping.isMultiplier = item["Options"].value("IsMultiplier", false);
 					}
-					bool hasWpn = false;
-					if (item.contains("Conditions")) {
-						auto& conds = item["Conditions"];
-						std::string mType = conds.value("MatchType", "OR");
-						std::transform(mType.begin(), mType.end(), mType.begin(), ::toupper);
-						mapping.keywordMatchAnd = (mType == "AND");
-						if (conds.contains("Weapons")) for (auto& wpVal : conds["Weapons"]) if (auto wpForm = ResolveIdentifier<RE::TESObjectWEAP>(wpVal.get<std::string>())) { mapping.weapons.push_back(wpForm); hasWpn = true; }
-						if (conds.contains("Keywords")) for (auto& kwVal : conds["Keywords"]) if (auto kwForm = ResolveIdentifier<RE::BGSKeyword>(kwVal.get<std::string>())) mapping.keywords.push_back(kwForm);
-						// 重量范围条件
-						if (conds.contains("MinWeight")) {
-							mapping.minWeight = conds["MinWeight"].get<float>();
-						}
-						if (conds.contains("MaxWeight")) mapping.maxWeight = conds["MaxWeight"].get<float>();
+					if (item.contains("AppliesTo") && item["AppliesTo"].is_object()) {
+						const auto& appliesTo = item["AppliesTo"];
+						if (appliesTo.contains("categories") && appliesTo["categories"].is_array())
+							for (const auto& category : appliesTo["categories"])
+								if (category.is_string()) mapping.categories.push_back(category.get<std::string>());
+						if (appliesTo.contains("formIDs") && appliesTo["formIDs"].is_array())
+							for (const auto& formID : appliesTo["formIDs"])
+								if (auto weapon = ResolveIdentifier<RE::TESObjectWEAP>(formID.get<std::string>())) mapping.weapons.push_back(weapon);
 					}
-					mapping.priority = hasWpn ? 9999 : (filePri + item.value("Priority", 0));
+					mapping.priority = filePri + item.value("Priority", 0);
 					CustomStrengthMappings.push_back(mapping);
 				}
 			},

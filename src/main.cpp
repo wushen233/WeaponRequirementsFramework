@@ -3,6 +3,7 @@
 #include "Mechanics.h"
 #include "UI.h"
 #include "IIF_API.h"
+#include "ClassificationManager.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
 
@@ -60,6 +61,8 @@ namespace WRF {
 }
 
 static bool g_hooksInstalled = false;
+static bool g_gameDataInitialized = false;
+static bool g_gameDataInitQueued = false;
 
 namespace {
     bool g_iifProviderRegistered = false;
@@ -141,23 +144,57 @@ namespace {
 void OnF4SEMessage(F4SE::MessagingInterface::Message* a_msg) {
     if (!a_msg) return;
 
-    if (a_msg->type == F4SE::MessagingInterface::kPostLoad) {
-        RegisterIIFProvider();
-    }
-    else if (a_msg->type == F4SE::MessagingInterface::kGameLoaded) {
+    auto initializeGameData = []() {
+        if (g_gameDataInitialized) return;
+
+        REX::INFO("[WRF] Deferred game-data initialization begin.");
+        WRF::Classification::Load();
         WRF::Config::GetSingleton()->LoadAllSettings();
         WRF::Config::GetSingleton()->LoadForms();
         if (auto ui = RE::UI::GetSingleton()) {
             ui->GetEventSource<RE::MenuOpenCloseEvent>()->RegisterSink(WRF::PauseMenuWatcher::GetSingleton());
         }
+        g_gameDataInitialized = true;
+        REX::INFO("[WRF] Deferred game-data initialization end.");
+        WRF::Mechanics::QueuePostLoadRefresh();
+    };
+
+    auto queueGameDataInitialization = [&]() {
+        if (g_gameDataInitialized || g_gameDataInitQueued) return;
+        auto task = F4SE::GetTaskInterface();
+        if (!task) {
+            REX::ERROR("[WRF] Task interface unavailable; deferred initialization was not queued.");
+            return;
+        }
+
+        g_gameDataInitQueued = true;
+        task->AddTask([initializeGameData]() {
+            g_gameDataInitQueued = false;
+            initializeGameData();
+        });
+        REX::INFO("[WRF] Deferred game-data initialization queued.");
+    };
+
+    if (a_msg->type == F4SE::MessagingInterface::kPostLoad) {
+        RegisterIIFProvider();
+    }
+    else if (a_msg->type == F4SE::MessagingInterface::kGameDataReady) {
+        // DataHandler's file array can still be changing here. Do not resolve
+        // plugin-backed forms or MSF identifiers from this callback.
+        REX::INFO("[WRF] GameDataReady observed; waiting for GameLoaded task boundary.");
+    }
+    else if (a_msg->type == F4SE::MessagingInterface::kGameLoaded) {
+        // Queue after this message returns so TESDataHandler::files is stable.
+        queueGameDataInitialization();
     }
     else if (a_msg->type == F4SE::MessagingInterface::kPostLoadGame || a_msg->type == F4SE::MessagingInterface::kNewGame) {
-        WRF::Config::GetSingleton()->LoadAllSettings();
         if (!g_hooksInstalled) {
             WRF::Mechanics::InstallHooks();
             g_hooksInstalled = true;
         }
-        WRF::Mechanics::QueuePostLoadRefresh();
+        if (g_gameDataInitialized) {
+            WRF::Mechanics::QueuePostLoadRefresh();
+        }
     }
 }
 

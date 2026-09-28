@@ -30,18 +30,6 @@
     {
       "pageDisplayName": "$WRF_MCM_PageRequirements",
       "content": [
-        {"type": "section", "text": "$WRF_MCM_SectionStrengthMode"},
-        {
-          "id": "iStrengthCalcMode:Main",
-          "text": "$WRF_MCM_StrengthCalcMode",
-          "type": "stepper",
-          "help": "$WRF_MCM_StrengthCalcModeHelp",
-          "valueOptions": {
-            "sourceType": "ModSettingInt",
-            "value": 0,
-            "options": ["$WRF_MCM_StrengthCalcModeOpt0", "$WRF_MCM_StrengthCalcModeOpt1"]
-          }
-        },
         {"type": "section", "text": "$WRF_MCM_SectionAmmoRules"},
         {
           "id": "iAmmoCalcMode:Modifiers",
@@ -103,18 +91,6 @@
             "max": 10,
             "step": 1,
             "value": 0
-          }
-        },
-        {"type": "section", "text": "$WRF_MCM_SectionSkillMode"},
-        {
-          "id": "iSkillCalcMode:Main",
-          "text": "$WRF_MCM_SkillCalcMode",
-          "type": "stepper",
-          "help": "$WRF_MCM_SkillCalcModeHelp",
-          "valueOptions": {
-            "sourceType": "ModSettingInt",
-            "value": 0,
-            "options": ["$WRF_MCM_SkillCalcModeOpt0", "$WRF_MCM_SkillCalcModeOpt1"]
           }
         },
         {"type": "section", "text": "$WRF_MCM_SectionPerkReduction"},

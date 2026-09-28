@@ -9,11 +9,8 @@ namespace WRF
 		bool isModifier{ false };
 		bool isMultiplier{ false };
 		float value{ 0.0f };
-		std::vector<RE::TESForm*> weapons;
-		std::vector<RE::BGSKeyword*> keywords;
-		bool keywordMatchAnd{ false };
-		float minWeight{ -1.0f };  // 重量范围下限（-1 = 不启用）
-		float maxWeight{ -1.0f };  // 重量范围上限（-1 = 无上限）
+		std::vector<std::string> categories;
+		std::vector<RE::TESObjectWEAP*> weapons;
 	};
 
 	struct AmmoWeightMapping {
@@ -27,11 +24,10 @@ namespace WRF
 		int priority{ 0 };
 		float reqValue{ 0.0f };
 		std::string icon;
-		std::vector<RE::TESObjectWEAP*> weapons;
-		std::vector<RE::BGSKeyword*> keywords;
-		bool keywordMatchAnd{ false };
 		std::vector<RE::ActorValueInfo*> skillAVs;
 		std::vector<RE::BGSPerk*> perks;
+		std::vector<std::string> categories;
+		float scaleFactor{ 1.0f };
 	};
 
 		class Config
@@ -39,22 +35,10 @@ namespace WRF
 	public:
 		static Config* GetSingleton();
 
-		enum class StrengthCalcMode : std::uint32_t
-		{
-			kJsonRules = 0,      // 原有的 JSON 规则驱动（按武器/关键词匹配）
-			kWeightBased = 1     // 基于重量范围的 JSON 规则驱动
-		};
-
 		enum class AmmoCalcMode : std::uint32_t
 		{
 			kFixedConfig = 0,    // 原有的固定配置驱动（按弹药类型匹配 JSON）
 			kWeightBased = 1     // 基于弹药自身重量计算需求
-		};
-
-		enum class SkillCalcMode : std::uint32_t
-		{
-			kPerkBased = 0,         // 原版 Perk 检测（突击队、双枪侠等）
-			kActorValueBased = 1    // 社区 0-100 角色值技能检测
 		};
 
 		void LoadAllSettings();
@@ -74,10 +58,7 @@ namespace WRF
 		bool bShowUI{ true };
 		int iUIDamageDisplayMode{ 0 };
 
-		// ----- 力量计算模式选择 -----
-		StrengthCalcMode iStrengthCalcMode{ StrengthCalcMode::kJsonRules };
 		AmmoCalcMode iAmmoCalcMode{ AmmoCalcMode::kFixedConfig };
-		SkillCalcMode iSkillCalcMode{ SkillCalcMode::kPerkBased };
 
 		bool bGatedSprint{ true };
 		bool bGatedRun{ false };

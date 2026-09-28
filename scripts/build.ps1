@@ -7,6 +7,17 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+$workspaceRootForBuild = $null
+$workspaceProbe = $projectRoot
+for ($i = 0; $i -lt 8; $i++) {
+    if (Test-Path -LiteralPath (Join-Path $workspaceProbe 'workspace.json')) {
+        $workspaceRootForBuild = $workspaceProbe
+        break
+    }
+    $parent = Split-Path -Parent $workspaceProbe
+    if ([string]::IsNullOrWhiteSpace($parent) -or $parent -eq $workspaceProbe) { break }
+    $workspaceProbe = $parent
+}
 
 if ([string]::IsNullOrWhiteSpace($CommonLibF4Path)) {
     $CommonLibF4Path = [Environment]::GetEnvironmentVariable('COMMONLIBF4_PATH', 'Process')
@@ -46,10 +57,14 @@ if (-not (Test-Path -LiteralPath (Join-Path $CommonLibF4Path 'xmake.lua'))) {
 $env:COMMONLIBF4_PATH = $CommonLibF4Path
 Push-Location $projectRoot
 try {
-    & xmake f -P $projectRoot -y -m $Configuration
+    $configureArgs = @('f', '-P', '.', '-y', '-m', $Configuration)
+    if ($null -ne $workspaceRootForBuild) {
+        $configureArgs += @('-o', (Join-Path $workspaceRootForBuild 'build\WeaponRequirementsFramework'))
+    }
+    & xmake @configureArgs
     if ($LASTEXITCODE -ne 0) { throw 'XMake configuration failed.' }
 
-    & xmake -P $projectRoot -y WeaponRequirementsFramework
+    & xmake -P . -y WeaponRequirementsFramework
     if ($LASTEXITCODE -ne 0) { throw 'WeaponRequirementsFramework build failed.' }
 }
 finally {
